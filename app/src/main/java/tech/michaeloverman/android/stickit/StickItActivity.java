@@ -1,27 +1,32 @@
 package tech.michaeloverman.android.stickit;
 
 import android.content.res.AssetManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MainActivity extends AppCompatActivity {
+public class StickItActivity extends tech.michaeloverman.android.stickit.SingleFragmentActivity {
+    private static final String TAG = "StickItActivity";
 
     private int[] nextDisp;
     private static final String FILE_FOLDER = "sequences";
     private AssetManager mAssets;
 
     @Override
+    protected Fragment createFragment() {
+        return StickItFragment.newInstance();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.fragment_stickit);
 
-        mAssets = this.getAssets();
+/*        mAssets = this.getAssets();
         int[] numLines;
         String[] fileNames;
         try {
@@ -31,19 +36,21 @@ public class MainActivity extends AppCompatActivity {
             Log.i("FILE", "gitten files, found: " + fileNames.length);
             for (String fileName : fileNames) {
                 try {
-                    String path = FILE_FOLDER + "/" + fileName;
-                    numLines[i++] = countLines(path);
+                    String path = "assets/sequences/" + fileName; //FILE_FOLDER + "/" + fileName;
+                    numLines = new int[countLines(path)];
+                    System.out.println(numLines.length + " lines in " + path);
                 } catch (IOException ioe) {
-                    numLines[i++] = 0;
+                    numLines = new int[1];
                     System.out.println("IOException caught in countLines()");
                     ioe.printStackTrace();
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+            numLines = new int[1];
         }
-
-        System.out.println("Number of lines: " + numLines[0]);
+//        if (numLines == null) { numLines = new int[2]; }
+//        System.out.println("Number of lines: " + numLines.length);  */
     }
 
 
