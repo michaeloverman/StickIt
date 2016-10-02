@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">StickIt</string>
+    <string name="pattern_length">Length</string>
+    <string name="choose_pattern_length">Choose Number of Stickings</string>
+    <string-array name="pattern_lengths">
+           <item>4</item>
+           <item>5</item>
+           <item>6</item>
+           <item>7</item>
+           <item>8</item>
+           <item>9</item>
+           <!--<item>10</item>-->
+           <!--<item>11</item>-->
+           <!--<item>12</item>-->
+           <!--<item>13</item>-->
+           <!--<item>14</item>-->
+           <!--<item>15</item>-->
+           <!--<item>16</item>-->
+    </string-array>
+
+    <string name="set_pattern_spacing">Choose Your Preferred Pattern Spacing</string>
+    <string name="pattern_spacing">Pattern Spacing</string>
+    <string-array name="spacing_options">
+        <item>None (RLRLRLR)</item>
+        <item>Paired Big-Small (RLRL RLR)</item>
+        <item>Paired Small-Big (RLR LRLR)</item>
+        <!--<item></item>-->
+        <!--<item></item>-->
+    </string-array>
 </resources>

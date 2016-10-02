@@ -13,5 +13,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:text="RLRL RLRL"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="56sp"
+        android:textColor="@android:color/black"
+        android:id="@+id/sticking_view"
+        android:paddingBottom="32sp"
+        android:paddingLeft="16sp"
+        android:paddingRight="16sp"
+        android:paddingTop="32sp"/>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/sticking_view"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/info_view"/>
+
 </RelativeLayout>

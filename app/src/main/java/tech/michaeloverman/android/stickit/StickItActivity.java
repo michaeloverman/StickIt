@@ -18,39 +18,15 @@ public class StickItActivity extends tech.michaeloverman.android.stickit.SingleF
 
     @Override
     protected Fragment createFragment() {
+        System.out.println("StickItActivity createFragment()");
         return StickItFragment.newInstance();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.fragment_stickit);
+        System.out.println("StickItActivity onCreate()");
 
-/*        mAssets = this.getAssets();
-        int[] numLines;
-        String[] fileNames;
-        try {
-            fileNames = mAssets.list(FILE_FOLDER);
-//            int[] numLines;
-            int i = 0;
-            Log.i("FILE", "gitten files, found: " + fileNames.length);
-            for (String fileName : fileNames) {
-                try {
-                    String path = "assets/sequences/" + fileName; //FILE_FOLDER + "/" + fileName;
-                    numLines = new int[countLines(path)];
-                    System.out.println(numLines.length + " lines in " + path);
-                } catch (IOException ioe) {
-                    numLines = new int[1];
-                    System.out.println("IOException caught in countLines()");
-                    ioe.printStackTrace();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            numLines = new int[1];
-        }
-//        if (numLines == null) { numLines = new int[2]; }
-//        System.out.println("Number of lines: " + numLines.length);  */
     }
 
 
