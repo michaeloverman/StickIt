@@ -15,8 +15,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Michael on 5/18/2016.
@@ -32,7 +33,7 @@ public class StickItFragment extends Fragment {
     private Sequence mSequence;
     private TextView mStickingView;
     private TextView mInfoView;
-    private Button mNextStoneButton, mPreviousStoneButton;
+    private ImageButton mNextStoneButton, mPreviousStoneButton;
     private TextView mStoneLabel;
 
     private boolean mDoingStones;
@@ -57,14 +58,14 @@ public class StickItFragment extends Fragment {
         System.out.println("StickItFragment onCreateView()");
         View view = inflater.inflate(R.layout.fragment_stickit, container, false);
 
-        mNextStoneButton = (Button) view.findViewById(R.id.button_next_stone);
+        mNextStoneButton = (ImageButton) view.findViewById(R.id.button_next_stone);
         mNextStoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 nextStone();
             }
         });
-        mPreviousStoneButton = (Button) view.findViewById(R.id.button_previous_stone);
+        mPreviousStoneButton = (ImageButton) view.findViewById(R.id.button_previous_stone);
         mPreviousStoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +104,7 @@ public class StickItFragment extends Fragment {
                             } else if (e2.getX() - e1.getX() > MIN_DISTANCE) {
                                 displaceR();
                             }
-                            mInfoView.setText("Int: " + mSequence.getInt());
+
                        } else {
 
                             if (e1.getY() - e2.getY() > MIN_DISTANCE) {
@@ -111,10 +112,10 @@ public class StickItFragment extends Fragment {
                             } else if (e2.getY() - e1.getY() > MIN_DISTANCE){
                                 cycleDown();
                             }
-                            mInfoView.setText("Int: " + mSequence.getInt());
+
 
                         }
-
+                        //updateViews();
 
                         return super.onFling(e1, e2, velocityX, velocityY);
                     }
@@ -174,9 +175,12 @@ public class StickItFragment extends Fragment {
 
     private void updateViews() {
         mStickingView.setText(mSequence.toString());
+        mInfoView.setText("Int: " + mSequence.getInt());
         if(mDoingStones && mSequence.isStone()) {
+            Toast.makeText(getActivity(), "changing Stone lable", Toast.LENGTH_SHORT).show();
             mStoneLabel.setText("Stone " + mSequence.getCurrentStone());
         } else {
+            Toast.makeText(getActivity(), "erasing stone label", Toast.LENGTH_SHORT).show();
             mStoneLabel.setText("");
         }
     }
@@ -238,6 +242,12 @@ public class StickItFragment extends Fragment {
                 mNextStoneButton.setVisibility(View.VISIBLE);
                 mPreviousStoneButton.setVisibility(View.VISIBLE);
                 mStoneLabel.setVisibility(View.VISIBLE);
+            } else {
+                mNextStoneButton.setVisibility(View.INVISIBLE);
+                mPreviousStoneButton.setVisibility(View.INVISIBLE);
+                mStoneLabel.setVisibility(View.INVISIBLE);
+                mSequence.setDoingStones(false);
+                mDoingStones = false;
             }
             updateViews();
             return;

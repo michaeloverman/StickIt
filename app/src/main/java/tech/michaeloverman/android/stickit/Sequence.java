@@ -41,16 +41,16 @@ public class Sequence {
         }
         stonePatternMap = Collections.unmodifiableMap(stoneMap);
         Map<Integer, Integer> strangeMap = new HashMap<>();
-        strangeMap.put(62,113);
-        strangeMap.put(63,142);
-        strangeMap.put(64,149);
-        strangeMap.put(65,106);
-        strangeMap.put(66,181);
-        strangeMap.put(67,74);
-        strangeMap.put(68,11);
-        strangeMap.put(69,240);
-        strangeMap.put(70,15);
-        strangeMap.put(71,149);
+        strangeMap.put(63,113);
+        strangeMap.put(64,142);
+        strangeMap.put(65,149);
+        strangeMap.put(66,106);
+        strangeMap.put(67,181);
+        strangeMap.put(68,74);
+        strangeMap.put(69,11);
+        strangeMap.put(70,240);
+        strangeMap.put(71,15);
+        strangeMap.put(72,149);
         strangeSecondHalf = Collections.unmodifiableMap(strangeMap);
     }
     private static int currentStone;
@@ -101,7 +101,7 @@ public class Sequence {
         return doingStones;
     }
     public void nextStone() {
-        currentStone = (currentStone + 1) % 73;
+        currentStone = (currentStone + 1) % 72;
         currentSequence = stonePatternMap.get(currentStone);
     }
     public void previousStone() {
@@ -119,8 +119,8 @@ public class Sequence {
     public void setDoingStones(boolean bool) {
         doingStones = bool;
         if(doingStones) {
-            currentStone = 0;
-            currentSequence = stonePattern[currentStone];
+            currentStone = 1;
+            currentSequence = stonePatternMap.get(currentStone);
         }
     }
     public static String patternToString(int p) {
@@ -191,12 +191,28 @@ public class Sequence {
     }
     public void cycleUp() {
         currentSequence = cycleUp(currentSequence);
+        checkIfStone();
     }
+
+    private void checkIfStone() {
+        if(doingStones) {
+            if(stonePatternMap.containsValue(currentSequence)) {
+                for(int i : stonePatternMap.keySet()) {
+                    if(stonePatternMap.get(i) == currentSequence) {
+                        currentStone = i;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public static int cycleDown(int pattern) {
         return (pattern - 1) & bitMask;
     }
     public void cycleDown() {
         currentSequence = cycleDown(currentSequence);
+        checkIfStone();
     }
     public static int rhythmicDisplaceR(int pattern) {
         int bit = (pattern & 1) << (patternLength - 1);
@@ -207,6 +223,7 @@ public class Sequence {
     }
     public void rhythmicDisplaceR() {
         currentSequence = rhythmicDisplaceR(currentSequence);
+        checkIfStone();
     }
     public static int rhythmicDisplaceL(int pattern) {
         int bit = (pattern >> (patternLength -1)) & 1;
@@ -217,6 +234,7 @@ public class Sequence {
     }
     public void rhythmicDisplaceL() {
         currentSequence = rhythmicDisplaceL(currentSequence);
+        checkIfStone();
     }
     public static int switchHands(int pattern) {
         return ~ pattern;
