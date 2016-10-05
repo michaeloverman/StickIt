@@ -15,12 +15,15 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
  * Created by Michael on 5/18/2016.
  */
 public class StickItFragment extends Fragment {
+    private static final int REQUEST_STONE_PATTERNS = 8;
+    private static final String DIALOG_STONE = "DialogStone";
     private final String DEBUG_TAG = "StickItFragment";
     private static final String DIALOG_PATTERN = "DialogPattern";
     private static final int REQUEST_PATTERN_LENGTH = 4;
@@ -29,6 +32,10 @@ public class StickItFragment extends Fragment {
     private Sequence mSequence;
     private TextView mStickingView;
     private TextView mInfoView;
+    private Button mNextStoneButton, mPreviousStoneButton;
+    private TextView mStoneLabel;
+
+    private boolean mDoingStones;
 
     public static Fragment newInstance() { return new StickItFragment(); }
 
@@ -41,6 +48,7 @@ public class StickItFragment extends Fragment {
         // get last times sequence length from savedInstanceState and use here:
         // mSequence = new Sequence(sequenceLength);
         mSequence = new Sequence(getContext(), 10);
+        mDoingStones = false;
     }
 
     @Nullable
@@ -49,6 +57,30 @@ public class StickItFragment extends Fragment {
         System.out.println("StickItFragment onCreateView()");
         View view = inflater.inflate(R.layout.fragment_stickit, container, false);
 
+        mNextStoneButton = (Button) view.findViewById(R.id.button_next_stone);
+        mNextStoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextStone();
+            }
+        });
+        mPreviousStoneButton = (Button) view.findViewById(R.id.button_previous_stone);
+        mPreviousStoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                previousStone();
+            }
+        });
+        mStoneLabel = (TextView) view.findViewById(R.id.stone_label);
+        if(mDoingStones) {
+            mPreviousStoneButton.setVisibility(View.VISIBLE);
+            mNextStoneButton.setVisibility(View.VISIBLE);
+            mStoneLabel.setVisibility(View.VISIBLE);
+        } else {
+            mPreviousStoneButton.setVisibility(View.INVISIBLE);
+            mNextStoneButton.setVisibility(View.INVISIBLE);
+            mStoneLabel.setVisibility(View.INVISIBLE);
+        }
         mStickingView = (TextView) view.findViewById(R.id.sticking_view);
         mInfoView = (TextView) view.findViewById(R.id.info_view);
 
@@ -129,6 +161,11 @@ public class StickItFragment extends Fragment {
                 dialog.setTargetFragment(StickItFragment.this, REQUEST_PATTERN_SPACING);
                 dialog.show(manager, DIALOG_SPACING);
                 return true;
+            case R.id.stone_patterns:
+                dialog = new StonePatternsDialogFragment();
+                dialog.setTargetFragment(StickItFragment.this, REQUEST_STONE_PATTERNS);
+                dialog.show(manager, DIALOG_STONE);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -137,6 +174,11 @@ public class StickItFragment extends Fragment {
 
     private void updateViews() {
         mStickingView.setText(mSequence.toString());
+        if(mDoingStones && mSequence.isStone()) {
+            mStoneLabel.setText("Stone " + mSequence.getCurrentStone());
+        } else {
+            mStoneLabel.setText("");
+        }
     }
     private void cycleUp() {
         mSequence.cycleUp();
@@ -159,12 +201,21 @@ public class StickItFragment extends Fragment {
 
     }
 
+    public void nextStone() {
+        mSequence.nextStone();
+        updateViews();
+    }
+    public void previousStone() {
+        mSequence.previousStone();
+        updateViews();
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
 
         if (requestCode == REQUEST_PATTERN_LENGTH) {
             int newLength = (int) data.getSerializableExtra(PatternLengthDialogFragment.EXTRA_NEW_LENGTH);
+            if (newLength == 11) newLength = 16;
             mSequence.newSequenceLength(newLength);
             updateViews();
             return;
@@ -173,6 +224,21 @@ public class StickItFragment extends Fragment {
         if (requestCode == REQUEST_PATTERN_SPACING) {
             int newSpacing = (int) data.getSerializableExtra(PatternSpacingDialogFragment.EXTRA_SPACING);
             mSequence.setNewSpacing(newSpacing);
+            updateViews();
+            return;
+        }
+
+        if (requestCode == REQUEST_STONE_PATTERNS) {
+            boolean response = (boolean) data.getSerializableExtra(StonePatternsDialogFragment.EXTRA_STONE_RESPONSE);
+            if (response) {
+                mSequence.newSequenceLength(8);
+                mSequence.setNewSpacing(Sequence.OPEN_SPACING_BIG_SMALL);
+                mSequence.setDoingStones(true);
+                mDoingStones = true;
+                mNextStoneButton.setVisibility(View.VISIBLE);
+                mPreviousStoneButton.setVisibility(View.VISIBLE);
+                mStoneLabel.setVisibility(View.VISIBLE);
+            }
             updateViews();
             return;
         }

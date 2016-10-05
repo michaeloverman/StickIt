@@ -9,17 +9,20 @@
            <item>7</item>
            <item>8</item>
            <item>9</item>
-           <!--<item>10</item>-->
+           <item>10</item>
            <!--<item>11</item>-->
            <!--<item>12</item>-->
            <!--<item>13</item>-->
            <!--<item>14</item>-->
            <!--<item>15</item>-->
-           <!--<item>16</item>-->
+           <item>16</item>
     </string-array>
 
     <string name="set_pattern_spacing">Choose Your Preferred Pattern Spacing</string>
     <string name="pattern_spacing">Pattern Spacing</string>
+    <string name="stone_pattern_string">Stick Control Patterns</string>
+    <string name="stick_control_question">Stick Control?</string>
+    <string name="stick_control_dialog_message">Do you want to practice the patterns from G.L.Stone\'s Stick Control?</string>
     <string-array name="spacing_options">
         <item>None (RLRLRLR)</item>
         <item>Paired Big-Small (RLRL RLR)</item>

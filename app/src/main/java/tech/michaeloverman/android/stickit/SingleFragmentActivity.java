@@ -5,6 +5,7 @@ import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 /**
  * Created by Michael on 4/21/2016.
@@ -32,6 +33,12 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
+    }
+    public void nextStone() {
+        Toast.makeText(this, "Activity Next Stone", Toast.LENGTH_SHORT).show();
+    }
+    public void previousStone() {
+        Toast.makeText(this, "Activity Previous Stone", Toast.LENGTH_SHORT).show();
     }
 }
 
