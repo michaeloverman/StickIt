@@ -26,7 +26,12 @@ public class StonePatternsDialogFragment extends AppCompatDialogFragment {
                         sendResult(Activity.RESULT_OK, true);
                     }
                 })
-                .setNegativeButton(android.R.string.no, null);
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendResult(Activity.RESULT_OK, false);
+                    }
+                });
 
         return builder.create();
     }

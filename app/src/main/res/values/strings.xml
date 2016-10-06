@@ -23,6 +23,7 @@
     <string name="stone_pattern_string">Stick Control Patterns</string>
     <string name="stick_control_question">Stick Control?</string>
     <string name="stick_control_dialog_message">Do you want to practice the patterns from G.L.Stone\'s Stick Control?</string>
+    <string name="set_new_tempo">Set New Tempo...</string>
     <string-array name="spacing_options">
         <item>None (RLRLRLR)</item>
         <item>Paired Big-Small (RLRL RLR)</item>

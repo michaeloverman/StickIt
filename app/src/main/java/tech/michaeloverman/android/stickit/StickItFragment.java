@@ -3,6 +3,7 @@ package tech.michaeloverman.android.stickit;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -17,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by Michael on 5/18/2016.
@@ -25,6 +25,8 @@ import android.widget.Toast;
 public class StickItFragment extends Fragment {
     private static final int REQUEST_STONE_PATTERNS = 8;
     private static final String DIALOG_STONE = "DialogStone";
+    private static final int REQUEST_TEMPO_MARKING = 120;
+    private static final String DIALOG_TEMPO = "DialogTempo";
     private final String DEBUG_TAG = "StickItFragment";
     private static final String DIALOG_PATTERN = "DialogPattern";
     private static final int REQUEST_PATTERN_LENGTH = 4;
@@ -35,8 +37,12 @@ public class StickItFragment extends Fragment {
     private TextView mInfoView;
     private ImageButton mNextStoneButton, mPreviousStoneButton;
     private TextView mStoneLabel;
+    private TextView mCountdownTimer;
+    private boolean mTiming;
+    private TextView mTempoMarking;
 
     private boolean mDoingStones;
+    private int mTempo = 120;
 
     public static Fragment newInstance() { return new StickItFragment(); }
 
@@ -48,7 +54,7 @@ public class StickItFragment extends Fragment {
         setHasOptionsMenu(true);
         // get last times sequence length from savedInstanceState and use here:
         // mSequence = new Sequence(sequenceLength);
-        mSequence = new Sequence(getContext(), 10);
+        mSequence = new Sequence(getContext(), 4);
         mDoingStones = false;
     }
 
@@ -58,6 +64,24 @@ public class StickItFragment extends Fragment {
         System.out.println("StickItFragment onCreateView()");
         View view = inflater.inflate(R.layout.fragment_stickit, container, false);
 
+        mCountdownTimer = (TextView) view.findViewById(R.id.countdown);
+        mCountdownTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mTiming) {
+                    stopTimer();
+                } else {
+                    startTimer();
+                }
+            }
+        });
+        mTempoMarking = (TextView) view.findViewById(R.id.tempo_marking);
+        mTempoMarking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newTempoMarking();
+            }
+        });
         mNextStoneButton = (ImageButton) view.findViewById(R.id.button_next_stone);
         mNextStoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,12 +163,51 @@ public class StickItFragment extends Fragment {
         return view;
     }
 
+    CountDownTimer mTimer;
+    private void startTimer() {
+        mTiming = true;
+        mInfoView.setText("starting timer");
+        mTimer = new CountDownTimer(120000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int minutes = (int) millisUntilFinished / 60000;
+                int seconds = (int) (millisUntilFinished % 60000) / 1000;
+                String timerText = String.format("%d:%d", minutes, seconds);
+                mCountdownTimer.setText(timerText);
+            }
+
+            @Override
+            public void onFinish() {
+                mCountdownTimer.setText("Done!");
+                logCompletedPattern();
+            }
+        };
+        mTimer.start();
+    }
+
+    private void stopTimer() {
+        mTiming = false;
+        mInfoView.setText("stopping timer");
+        mTimer.cancel();
+    }
+
+    private void logCompletedPattern() {
+        // do stuff here to track progress - database, etc.
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_stickit, menu);
     }
 
+    private void newTempoMarking() {
+        FragmentManager manager = getFragmentManager();
+        DialogFragment dialog = new TimePickerDialog();
+        dialog.setTargetFragment(StickItFragment.this, REQUEST_TEMPO_MARKING);
+        dialog.show(manager, DIALOG_TEMPO);
+
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -177,12 +240,11 @@ public class StickItFragment extends Fragment {
         mStickingView.setText(mSequence.toString());
         mInfoView.setText("Int: " + mSequence.getInt());
         if(mDoingStones && mSequence.isStone()) {
-            Toast.makeText(getActivity(), "changing Stone lable", Toast.LENGTH_SHORT).show();
             mStoneLabel.setText("Stone " + mSequence.getCurrentStone());
         } else {
-            Toast.makeText(getActivity(), "erasing stone label", Toast.LENGTH_SHORT).show();
             mStoneLabel.setText("");
         }
+        mTempoMarking.setText(Integer.toString(mTempo));
     }
     private void cycleUp() {
         mSequence.cycleUp();
@@ -217,40 +279,43 @@ public class StickItFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
 
-        if (requestCode == REQUEST_PATTERN_LENGTH) {
-            int newLength = (int) data.getSerializableExtra(PatternLengthDialogFragment.EXTRA_NEW_LENGTH);
-            if (newLength == 11) newLength = 16;
-            mSequence.newSequenceLength(newLength);
-            updateViews();
-            return;
-        }
-
-        if (requestCode == REQUEST_PATTERN_SPACING) {
-            int newSpacing = (int) data.getSerializableExtra(PatternSpacingDialogFragment.EXTRA_SPACING);
-            mSequence.setNewSpacing(newSpacing);
-            updateViews();
-            return;
-        }
-
-        if (requestCode == REQUEST_STONE_PATTERNS) {
-            boolean response = (boolean) data.getSerializableExtra(StonePatternsDialogFragment.EXTRA_STONE_RESPONSE);
-            if (response) {
-                mSequence.newSequenceLength(8);
-                mSequence.setNewSpacing(Sequence.OPEN_SPACING_BIG_SMALL);
-                mSequence.setDoingStones(true);
-                mDoingStones = true;
-                mNextStoneButton.setVisibility(View.VISIBLE);
-                mPreviousStoneButton.setVisibility(View.VISIBLE);
-                mStoneLabel.setVisibility(View.VISIBLE);
-            } else {
-                mNextStoneButton.setVisibility(View.INVISIBLE);
-                mPreviousStoneButton.setVisibility(View.INVISIBLE);
-                mStoneLabel.setVisibility(View.INVISIBLE);
-                mSequence.setDoingStones(false);
-                mDoingStones = false;
-            }
-            updateViews();
-            return;
+        switch(requestCode) {
+            case REQUEST_PATTERN_LENGTH:
+                int newLength = (int) data.getSerializableExtra(PatternLengthDialogFragment.EXTRA_NEW_LENGTH);
+                if (newLength == 11) newLength = 16;
+                mSequence.newSequenceLength(newLength);
+                updateViews();
+                break;
+            case REQUEST_PATTERN_SPACING:
+                int newSpacing = (int) data.getSerializableExtra(PatternSpacingDialogFragment.EXTRA_SPACING);
+                mSequence.setNewSpacing(newSpacing);
+                updateViews();
+                break;
+            case REQUEST_STONE_PATTERNS:
+                boolean response = (boolean) data.getSerializableExtra(StonePatternsDialogFragment.EXTRA_STONE_RESPONSE);
+                if (response) {
+                    mSequence.newSequenceLength(8);
+                    mSequence.setNewSpacing(Sequence.OPEN_SPACING_BIG_SMALL);
+                    mSequence.setDoingStones(true);
+                    mDoingStones = true;
+                    mNextStoneButton.setVisibility(View.VISIBLE);
+                    mPreviousStoneButton.setVisibility(View.VISIBLE);
+                    mStoneLabel.setVisibility(View.VISIBLE);
+                } else {
+                    mNextStoneButton.setVisibility(View.INVISIBLE);
+                    mPreviousStoneButton.setVisibility(View.INVISIBLE);
+                    mStoneLabel.setVisibility(View.INVISIBLE);
+                    mSequence.setDoingStones(false);
+                    mDoingStones = false;
+                }
+                updateViews();
+                break;
+            case REQUEST_TEMPO_MARKING:
+                int newTempo = (int) data.getSerializableExtra(TempoMarkingDialogFragment.EXTRA_TEMPO);
+                mTempo = newTempo;
+                updateViews();
+                break;
+            default:
         }
     }
 /*
