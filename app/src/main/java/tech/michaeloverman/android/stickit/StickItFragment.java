@@ -203,7 +203,7 @@ public class StickItFragment extends Fragment {
 
     private void newTempoMarking() {
         FragmentManager manager = getFragmentManager();
-        DialogFragment dialog = new TempoMarkingDialogFragment();
+        DialogFragment dialog = TempoMarkingDialogFragment.newInstance(mTempo);
         dialog.setTargetFragment(StickItFragment.this, REQUEST_TEMPO_MARKING);
         dialog.show(manager, DIALOG_TEMPO);
 
