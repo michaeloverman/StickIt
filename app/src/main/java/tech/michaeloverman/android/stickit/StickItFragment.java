@@ -2,6 +2,7 @@ package tech.michaeloverman.android.stickit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -44,6 +46,11 @@ public class StickItFragment extends Fragment {
     private boolean mDoingStones;
     private int mTempo = 120;
 
+    private Metronome mMetronome;
+    private SoundPool mSoundPool;
+    private Button mStartButton;
+    private boolean mMetronomeRunning;
+
     public static Fragment newInstance() { return new StickItFragment(); }
 
     @Override
@@ -56,6 +63,8 @@ public class StickItFragment extends Fragment {
         // mSequence = new Sequence(sequenceLength);
         mSequence = new Sequence(getContext(), 4);
         mDoingStones = false;
+        mMetronome = new Metronome(getActivity());
+        mMetronomeRunning = false;
     }
 
     @Nullable
@@ -80,6 +89,13 @@ public class StickItFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 newTempoMarking();
+            }
+        });
+        mStartButton = (Button) view.findViewById(R.id.start_button);
+        mStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopStartMetronome();
             }
         });
         mNextStoneButton = (ImageButton) view.findViewById(R.id.button_next_stone);
@@ -162,6 +178,20 @@ public class StickItFragment extends Fragment {
         mStickingView.setText(mSequence.toString());
         return view;
     }
+
+    private void stopStartMetronome() {
+
+        if(mMetronomeRunning) {
+            mMetronome.stop();
+            mMetronomeRunning = false;
+            mStartButton.setText(R.string.start);
+        } else {
+            mMetronomeRunning = true;
+            mStartButton.setText(R.string.stop);
+            mMetronome.play(mTempo);
+        }
+    }
+
 
     CountDownTimer mTimer;
     private void startTimer() {

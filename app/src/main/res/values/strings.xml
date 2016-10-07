@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">StickIt</string>
-    <string name="pattern_length">Length</string>
+    <string name="pattern_length">Pattern Length</string>
     <string name="choose_pattern_length">Choose Number of Stickings</string>
     <string-array name="pattern_lengths">
            <item>4</item>
@@ -24,6 +24,9 @@
     <string name="stick_control_question">Stick Control?</string>
     <string name="stick_control_dialog_message">Do you want to practice the patterns from G.L.Stone\'s Stick Control?</string>
     <string name="set_new_tempo">Set New Tempo...</string>
+    <string name="start">Start</string>
+    <string name="bpm">BPM</string>
+    <string name="stop">Stop</string>
     <string-array name="spacing_options">
         <item>None (RLRLRLR)</item>
         <item>Paired Big-Small (RLRL RLR)</item>

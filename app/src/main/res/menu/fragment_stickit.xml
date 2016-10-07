@@ -4,13 +4,13 @@
 
     <item android:id="@+id/set_pattern_length"
           android:title="@string/pattern_length"
-          app:showAsAction="ifRoom" />
+          app:showAsAction="never" />
 
     <item android:id="@+id/set_pattern_spacing"
           android:title="@string/pattern_spacing"
-          app:showAsAction="ifRoom" />
+          app:showAsAction="never" />
 
     <item android:id="@+id/stone_patterns"
           android:title="@string/stone_pattern_string"
-          app:showAsAction="ifRoom" />
+          app:showAsAction="never" />
 </menu>
