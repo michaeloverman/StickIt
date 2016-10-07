@@ -202,7 +202,7 @@ public class StickItFragment extends Fragment {
             public void onTick(long millisUntilFinished) {
                 int minutes = (int) millisUntilFinished / 60000;
                 int seconds = (int) (millisUntilFinished % 60000) / 1000;
-                String timerText = String.format("%d:%d", minutes, seconds);
+                String timerText = String.format("%d:%02d", minutes, seconds);
                 mCountdownTimer.setText(timerText);
             }
 
