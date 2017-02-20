@@ -54,7 +54,8 @@ public class Metronome {
     CountDownTimer mTimer;
 
     public void play(int tempo) {
-        mDelay = 60000 / tempo;
+        mDelay = 60000 / tempo / 4;
+        final int[] loop = { 4, 4, 6, 4, 4, 4, 6, 4, 2, 2, 4, 4, 5, 6, 7, 8 };
         mClickId = mClicks.get(0).getSoundId();
 //        mHiClickId = mClicks.get(1).getSoundId();
 //        mLoClickId = mClicks.get(2).getSoundId();
@@ -63,17 +64,20 @@ public class Metronome {
         }
 
         mTimer = new CountDownTimer(TWENTY_MINUTES, mDelay) {
-            boolean hilo = true;
+            int count = 0;
+            int goal = 0;
+            int loopPointer = 0;
             @Override
             public void onTick(long millisUntilFinished) {
-                mSoundPool.play(mClickId, 1.0f, 1.0f, 1, 0, 1.0f);
-//                if(hilo) {
-//                    mSoundPool.play(mHiClickId, 1.0f, 1.0f, 1, 0, 1.0f);
-//                    hilo = !hilo;
-//                } else {
-//                    mSoundPool.play(mLoClickId, 1.0f, 1.0f, 1, 0, 1.0f);
-//                    hilo = !hilo;
-//                }
+                if (count == goal) {
+                    mSoundPool.play(mClickId, 1.0f, 1.0f, 1, 0, 1.0f);
+                    goal += loop[loopPointer++];
+                    if(loopPointer >= loop.length) {
+                        loopPointer = 0;
+                    }
+                }
+                count++;
+
             }
 
             @Override
