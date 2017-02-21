@@ -13,4 +13,8 @@
     <item android:id="@+id/stone_patterns"
           android:title="@string/stone_pattern_string"
           app:showAsAction="never" />
+
+    <item android:id="@+id/programmed_metronome"
+        android:title="@string/programmed_metronome"
+        app:showAsAction="never" />
 </menu>

@@ -27,11 +27,18 @@
     <string name="start">Start</string>
     <string name="bpm">BPM</string>
     <string name="stop">Stop</string>
+    <string name="programmed_metronome">Programmed Metronome</string>
+    <string name="choose_etude">Select an etude</string>
     <string-array name="spacing_options">
         <item>None (RLRLRLR)</item>
         <item>Paired Big-Small (RLRL RLR)</item>
         <item>Paired Small-Big (RLR LRLR)</item>
         <!--<item></item>-->
         <!--<item></item>-->
+    </string-array>
+
+    <string-array name="custom_metronome_options">
+        <item>Cirone 12</item>
+        <item>Cirone 17</item>
     </string-array>
 </resources>

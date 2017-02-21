@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import tech.michaeloverman.android.stickit.dialogs.PatternLengthDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.PatternSpacingDialogFragment;
+import tech.michaeloverman.android.stickit.dialogs.ProgrammedMetronomeDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.StonePatternsDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.TempoMarkingDialogFragment;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
@@ -42,6 +43,9 @@ public class StickItFragment extends Fragment {
     private static final int REQUEST_PATTERN_LENGTH = 4;
     private static final String DIALOG_SPACING = "DialogSpacing";
     private static final int REQUEST_PATTERN_SPACING = 0;
+    private static final int REQUEST_CUSTOM_METRONOME = 144;
+    private static final String DIALOG_CUSTOM = "DialogCustomMetronome";
+
     private Sequence mSequence;
     private TextView mStickingView;
     private TextView mInfoView;
@@ -281,6 +285,10 @@ public class StickItFragment extends Fragment {
                 dialog.setTargetFragment(StickItFragment.this, REQUEST_STONE_PATTERNS);
                 dialog.show(manager, DIALOG_STONE);
                 return true;
+            case R.id.programmed_metronome:
+                dialog = new ProgrammedMetronomeDialogFragment();
+                dialog.setTargetFragment(StickItFragment.this, REQUEST_CUSTOM_METRONOME);
+                dialog.show(manager, DIALOG_CUSTOM);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -364,6 +372,11 @@ public class StickItFragment extends Fragment {
             case REQUEST_TEMPO_MARKING:
                 int newTempo = (int) data.getSerializableExtra(TempoMarkingDialogFragment.EXTRA_TEMPO);
                 mTempo = newTempo;
+                updateViews();
+                break;
+            case REQUEST_CUSTOM_METRONOME:
+                
+
                 updateViews();
                 break;
             default:
