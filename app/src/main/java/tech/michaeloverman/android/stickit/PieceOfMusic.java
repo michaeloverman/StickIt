@@ -14,6 +14,7 @@ public class PieceOfMusic {
     private int[] mBeats;
     private int[] mDownBeats;
     private int mSubdivision;
+    private int mCountOffMeasureLength;
 
     public PieceOfMusic(String title) {
         Log.d(TAG, "PieceOfMusic constructor()");
@@ -50,6 +51,7 @@ public class PieceOfMusic {
 //        insureLCD(beats);
         int[] countoff = buildCountoff(beats[0]);
         mBeats = combine(countoff, beats);
+        printArray(mBeats);
     }
 
     private void printArray(int[] array) {
@@ -62,15 +64,16 @@ public class PieceOfMusic {
 
     /** Uses the 'length' of first beat to generate count off measure */
     private int[] buildCountoff(int firstBeat) {
-        int[] countOff = new int[COUNTOFF_LENGTH + firstBeat - 1];
+        mCountOffMeasureLength = COUNTOFF_LENGTH + firstBeat - 1;
+        int[] countOff = new int[mCountOffMeasureLength];
         int i;
-        for (i = 0; i < countOff.length; i++) {
-            if (i == COUNTOFF_LENGTH - 2) {
+        for (i = 0; i < countOff.length; ) {
+            if (i != COUNTOFF_LENGTH - 2) {
+                countOff[i++] = firstBeat;
+            } else {
                 for (int j = 0; j < firstBeat; j++) {
                     countOff[i++] = 1;
                 }
-            } else {
-                countOff[i] = firstBeat;
             }
         }
         return countOff;
@@ -89,6 +92,9 @@ public class PieceOfMusic {
     }
 
     public void setDownBeats(int[] downBeats) {
-        mDownBeats = downBeats;
+        int[] allDownBeats = new int[downBeats.length + 1];
+        allDownBeats[0] = mCountOffMeasureLength;
+        System.arraycopy(downBeats, 0, allDownBeats, 1, downBeats.length);
+        mDownBeats = allDownBeats;
     }
 }

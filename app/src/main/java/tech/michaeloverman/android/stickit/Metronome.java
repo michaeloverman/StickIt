@@ -77,32 +77,52 @@ public class Metronome {
         mTimer.start();
     }
 
+    private void printArray(int[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            sb.append(array[i] + ", ");
+        }
+        Log.d(TAG, sb.toString());
+    }
+
     public void play(PieceOfMusic p, int tempo) {
         Log.d(TAG, "metronome play()");
         mDelay = 60000 / tempo / p.getSubdivision();
-        final int[] loop = p.getBeats();
+        final int[] beats = p.getBeats();
+        final int[] downBeats = p.getDownBeats();
 
-        Log.d(TAG, loop.toString());
+        printArray(beats);
+        printArray(downBeats);
 
         mClickId = mClicks.get(0).getSoundId();
-//        mHiClickId = mClicks.get(1).getSoundId();
-//        mLoClickId = mClicks.get(2).getSoundId();
+        mHiClickId = mClicks.get(1).getSoundId();
+        mLoClickId = mClicks.get(2).getSoundId();
         if (mClickId == null) {
             return;
         }
 
         mTimer = new CountDownTimer(TWENTY_MINUTES, mDelay) {
             int count = 0;
-            int goal = 0;
-            int loopPointer = 0;
+            int nextClick = 0;
+            int clickPointer = 0;
+            int clickCount = 0;
+            int downBeatPointer = 0;
+
             @Override
             public void onTick(long millisUntilFinished) {
-                if (count == goal) {
-                    mSoundPool.play(mClickId, 1.0f, 1.0f, 1, 0, 1.0f);
-                    goal += loop[loopPointer++];
-                    if(loopPointer >= loop.length) {
+                if (count == nextClick) {
+                    if(clickCount == 0) {
+                        mSoundPool.play(mHiClickId, 1.0f, 1.0f, 1, 0, 1.0f);
+                        clickCount = downBeats[downBeatPointer++];
+//                        downBeatPointer++;
+                    } else {
+                        mSoundPool.play(mLoClickId, 1.0f, 1.0f, 1, 0, 1.0f);
+                    }
+                    nextClick += beats[clickPointer++];
+                    if(clickPointer > beats.length) {
                         this.cancel();
                     }
+                    clickCount--;
                 }
                 count++;
 
