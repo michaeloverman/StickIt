@@ -54,8 +54,36 @@ public class Metronome {
     CountDownTimer mTimer;
 
     public void play(int tempo) {
-        mDelay = 60000 / tempo / 4;
-        final int[] loop = { 4, 4, 6, 4, 4, 4, 6, 4, 2, 2, 4, 4, 5, 6, 7, 8 };
+        mDelay = 60000 / tempo;
+        mClickId = mClicks.get(0).getSoundId();
+//        mHiClickId = mClicks.get(1).getSoundId();
+//        mLoClickId = mClicks.get(2).getSoundId();
+        if (mClickId == null) {
+            return;
+        }
+
+        mTimer = new CountDownTimer(TWENTY_MINUTES, mDelay) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                    mSoundPool.play(mClickId, 1.0f, 1.0f, 1, 0, 1.0f);
+            }
+//
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+        mTimer.start();
+    }
+
+    public void play(PieceOfMusic p, int tempo) {
+        Log.d(TAG, "metronome play()");
+        mDelay = 60000 / tempo / p.getSubdivision();
+        final int[] loop = p.getBeats();
+
+        Log.d(TAG, loop.toString());
+
         mClickId = mClicks.get(0).getSoundId();
 //        mHiClickId = mClicks.get(1).getSoundId();
 //        mLoClickId = mClicks.get(2).getSoundId();
@@ -73,7 +101,7 @@ public class Metronome {
                     mSoundPool.play(mClickId, 1.0f, 1.0f, 1, 0, 1.0f);
                     goal += loop[loopPointer++];
                     if(loopPointer >= loop.length) {
-                        loopPointer = 0;
+                        this.cancel();
                     }
                 }
                 count++;
@@ -82,7 +110,7 @@ public class Metronome {
 
             @Override
             public void onFinish() {
-
+                this.cancel();
             }
         };
         mTimer.start();

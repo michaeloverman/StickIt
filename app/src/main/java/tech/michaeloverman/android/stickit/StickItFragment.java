@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,7 +30,8 @@ public class StickItFragment extends Fragment {
     private static final String DIALOG_STONE = "DialogStone";
     private static final int REQUEST_TEMPO_MARKING = 120;
     private static final String DIALOG_TEMPO = "DialogTempo";
-    private final String DEBUG_TAG = "StickItFragment";
+    private static final String TAG = StickItFragment.class.getSimpleName();
+
     private static final String DIALOG_PATTERN = "DialogPattern";
     private static final int REQUEST_PATTERN_LENGTH = 4;
     private static final String DIALOG_SPACING = "DialogSpacing";
@@ -51,12 +53,68 @@ public class StickItFragment extends Fragment {
     private Button mStartButton;
     private boolean mMetronomeRunning;
 
+    private PieceOfMusic mCirone12;
+    private PieceOfMusic getCirone12() {
+        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 12");
+        p.setAuthor("Anthony Cirone");
+        p.setSubdivision(2);
+//        p.setBeats(new int[] {
+//                2,2,2,2,2,2,1,1,2,2,3,
+//                2,2,2,2,2,2,1,1,2,2,3,
+//                2,2,3,2,2,2,2,2,2,2,2,3,
+//                1,1,3,2,2,3,2,2,3,
+//                2,2,2,3,3,2,2,2,2,
+//                2,2,3,3,3,3,3,2,2,2,2,
+//                2,2,2,2,2,2,2,2,2,2,3,2,2,
+//                3,2,2,3,2,2,3,2,2,
+//                3,2,2,3,3,2,2,2,2,
+//                2,2,2,2,1,1,2,2,3,3,1} );
+        p.setBeats(new int[] {
+                3,3,3,2,3,3,3,2,3,
+                3,2,2,2,3,3,2,2,2,3,
+                3,3,2,2,3,2,2,2,2,3,2,
+                2,2,3,2,3,2,2,3,3,3,3,2,
+                3,3,3,2,3,2,3,2,3,2,
+                3,2,3,2,3,2,3,2,3,2,3,2,
+                2,3,3,2,3,2,2,
+                3,3,3,2,3,3,2,2,3,
+                3,3,3,2,3,3,3,
+                2,3,2,3,3,2,
+                3,3,3,3,3,3,2
+        });
+//        p.setDownBeats(new int[] {
+//                0,2,4,6,8,10,
+//                11,13,15,17,19,21,
+//                22,24,25,27,29,31,33,
+//                34,36,37,39,40,42,
+//                43,45,46,47,48,50,
+//                52,54,55,56,57,58,59,60,62,
+//                64,66,68,70,72,74,75,
+//                77,78,80,81,83,84,
+//                86,87,89,90,91,93,
+//                95,97,99,101,103,104,105 } );
+        p.setDownBeats(new int[] {
+                1,1,1,1,1,1,1,1,1,
+                1,1,1,1,1,1,1,1,1,1,
+                1,2,2,1,1,1,1,1,1,
+                1,1,2,2,2,1,1,1,1,
+                1,1,1,1,2,2,2,
+                2,2,2,2,2,2,
+                2,2,2,1,
+                1,1,1,1,1,1,1,2,
+                1,1,1,1,1,1,1,
+                1,2,1,1,1,
+                1,1,1,1,1,1,1,1
+        });
+        return p;
+    }
+
     public static Fragment newInstance() { return new StickItFragment(); }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("StickItFragment onCreate()");
+        Log.d(TAG, "StickItFragment onCreate()");
         setRetainInstance(true);   // see BeatBox for why this, what it does...
         setHasOptionsMenu(true);
         // get last times sequence length from savedInstanceState and use here:
@@ -65,12 +123,13 @@ public class StickItFragment extends Fragment {
         mDoingStones = false;
         mMetronome = new Metronome(getActivity());
         mMetronomeRunning = false;
+        mCirone12 = getCirone12();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("StickItFragment onCreateView()");
+        Log.d(TAG, "StickItFragment onCreateView()");
         View view = inflater.inflate(R.layout.fragment_stickit, container, false);
 
         mCountdownTimer = (TextView) view.findViewById(R.id.countdown);
@@ -188,7 +247,7 @@ public class StickItFragment extends Fragment {
         } else {
             mMetronomeRunning = true;
             mStartButton.setText(R.string.stop);
-            mMetronome.play(mTempo);
+            mMetronome.play(mCirone12, mTempo);
         }
     }
 
