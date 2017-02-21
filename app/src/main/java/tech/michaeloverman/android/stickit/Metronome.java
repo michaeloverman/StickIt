@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tech.michaeloverman.android.stickit.pojos.Click;
+import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
+
 /**
  * Created by Michael on 10/6/2016.
  */
@@ -114,14 +117,13 @@ public class Metronome {
                     if(clickCount == 0) {
                         mSoundPool.play(mHiClickId, 1.0f, 1.0f, 1, 0, 1.0f);
                         clickCount = downBeats[downBeatPointer++];
-//                        downBeatPointer++;
                     } else {
                         mSoundPool.play(mLoClickId, 1.0f, 1.0f, 1, 0, 1.0f);
                     }
-                    nextClick += beats[clickPointer++];
-                    if(clickPointer > beats.length) {
+                    if(clickPointer == beats.length) {
                         this.cancel();
                     }
+                    nextClick += beats[clickPointer++];
                     clickCount--;
                 }
                 count++;

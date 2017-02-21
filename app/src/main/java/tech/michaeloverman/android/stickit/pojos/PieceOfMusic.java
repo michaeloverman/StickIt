@@ -1,4 +1,4 @@
-package tech.michaeloverman.android.stickit;
+package tech.michaeloverman.android.stickit.pojos;
 
 import android.util.Log;
 

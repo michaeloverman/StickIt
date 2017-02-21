@@ -1,4 +1,4 @@
-package tech.michaeloverman.android.stickit;
+package tech.michaeloverman.android.stickit.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+
+import tech.michaeloverman.android.stickit.R;
 
 /**
  * Created by Michael on 10/1/2016.

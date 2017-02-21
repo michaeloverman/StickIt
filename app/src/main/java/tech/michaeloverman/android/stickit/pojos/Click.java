@@ -1,4 +1,4 @@
-package tech.michaeloverman.android.stickit;
+package tech.michaeloverman.android.stickit.pojos;
 
 /**
  * Created by Michael on 10/6/2016.

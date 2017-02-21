@@ -1,4 +1,4 @@
-package tech.michaeloverman.android.stickit;
+package tech.michaeloverman.android.stickit.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.widget.NumberPicker;
+
+import tech.michaeloverman.android.stickit.R;
 
 /**
  * Created by Michael on 10/5/2016.
