@@ -108,23 +108,23 @@ public class Metronome {
             int count = 0;
             int nextClick = 0;
             int clickPointer = 0;
-            int clickCount = 0;
+            int beatsPerMeasureCount = 0;
             int downBeatPointer = 0;
 
             @Override
             public void onTick(long millisUntilFinished) {
                 if (count == nextClick) {
-                    if(clickCount == 0) {
+                    if(beatsPerMeasureCount == 0) {
                         mSoundPool.play(mHiClickId, 1.0f, 1.0f, 1, 0, 1.0f);
-                        clickCount = downBeats[downBeatPointer++];
+                        beatsPerMeasureCount = downBeats[downBeatPointer++];
                     } else {
                         mSoundPool.play(mLoClickId, 1.0f, 1.0f, 1, 0, 1.0f);
                     }
-                    if(clickPointer == beats.length) {
-                        this.cancel();
+                    if(clickPointer == beats.length - 1) {
+                        stop();
                     }
                     nextClick += beats[clickPointer++];
-                    clickCount--;
+                    beatsPerMeasureCount--;
                 }
                 count++;
 

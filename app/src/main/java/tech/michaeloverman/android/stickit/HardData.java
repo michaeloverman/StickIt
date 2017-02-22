@@ -11,6 +11,14 @@ public class HardData {
     public static Integer[] stoneUtility = {15,16,17,22,23,24,25,31,38,39,46,47,52,53,59,61};
     public static Integer[] strangeSecondUtility = {62,113,63,142,64,149,65,106,66,181,67,74,68,11,69,240,70,15,71,149};
 
+    public static int[] testPatternBeats = {
+            2,2,3,2,2,3,2,2,2,2,2,2,3,
+            2,2,3,2,2,3,2,2,2,2,2,2,3
+    };
+    public static int[] testPatternDownBeats = {
+            3,3,7,3,3,7,1
+    };
+
     public static int[] cirone12Beats = {
             2,2,2,2,2,2,2,2,2,3,
             2,2,2,2,2,2,2,2,2,3,
@@ -95,6 +103,6 @@ public class HardData {
             2,2,2,2,
             1,1,1,1,1,1,1,1,1,1,1,1,
             1,1,1,1,1,1,1,1,1,1,1,1,
-            4,2,4,2,3,3
+            4,2,4,2,3,3,3
     };
 }
