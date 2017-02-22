@@ -375,7 +375,7 @@ public class StickItFragment extends Fragment {
                 updateViews();
                 break;
             case REQUEST_CUSTOM_METRONOME:
-                
+
 
                 updateViews();
                 break;
