@@ -67,10 +67,10 @@ public class StickItFragment extends Fragment {
     private PieceOfMusic getCirone12() {
         PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 12");
         p.setAuthor("Anthony Cirone");
-        p.setSubdivision(2);
-        p.setBeats(HardData.cirone12Beats);
+        p.setSubdivision(4);
+        p.setBeats(HardData.cirone16Beats);
 //        p.setBeats(HardData.cirone17Beats);
-        p.setDownBeats(HardData.cirone12DownBeats);
+        p.setDownBeats(HardData.cirone16DownBeats);
 //        p.setDownBeats(HardData.cirone17DownBeats);
         return p;
     }
