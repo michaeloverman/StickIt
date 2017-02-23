@@ -73,13 +73,13 @@ public class StickItFragment extends Fragment {
 
 
     private PieceOfMusic getCirone12() {
-        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 16");
+        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 17");
         p.setAuthor("Cirone, Anthony");
-        p.setSubdivision(4);
+        p.setSubdivision(3);
 //        p.setBeats(HardData.testPatternBeats);
-        p.setBeats(HardData.cirone16Beats);
+        p.setBeats(HardData.cirone17Beats);
 //        p.setDownBeats(HardData.testPatternDownBeats);
-        p.setDownBeats(HardData.cirone16DownBeats);
+        p.setDownBeats(HardData.cirone17DownBeats);
 
         mDatabase = FirebaseDatabase.getInstance();
         mPiecesDatabaseReference = mDatabase.getReference().child("pieces");

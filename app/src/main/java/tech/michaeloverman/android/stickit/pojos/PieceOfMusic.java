@@ -10,8 +10,8 @@ import java.util.List;
  */
 
 public class PieceOfMusic {
-    private static final int COUNTOFF_LENGTH = 4;
     private static final String TAG = PieceOfMusic.class.getSimpleName();
+    private static final int COUNTOFF_LENGTH = 4;
     private String mTitle;
     private String mAuthor;
     private List<Integer> mBeats;
@@ -25,6 +25,14 @@ public class PieceOfMusic {
     }
 
     public PieceOfMusic() { }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
+    }
 
     public String getAuthor() {
         return mAuthor;
@@ -42,13 +50,13 @@ public class PieceOfMusic {
         mSubdivision = subdivision;
     }
 
-//    public int[] getBeatsArray() {
-//        int[] beats = new int[mBeats.size()];
-//        for(int i = 0; i < mBeats.size(); i++) {
-//            beats[i] = mBeats.get(i);
-//        }
-//        return beats;
-//    }
+    public int[] beatsArray() {
+        int[] beats = new int[mBeats.size()];
+        for(int i = 0; i < mBeats.size(); i++) {
+            beats[i] = mBeats.get(i);
+        }
+        return beats;
+    }
 
     public List<Integer> getBeats() {
         return mBeats;
@@ -104,13 +112,13 @@ public class PieceOfMusic {
         return combination;
     }
 
-//    public int[] getDownBeatsArray() {
-//        int[] beats = new int[mDownBeats.size()];
-//        for(int i = 0; i < mDownBeats.size(); i++) {
-//            beats[i] = mDownBeats.get(i);
-//        }
-//        return beats;
-//    }
+    public int[] downBeatsArray() {
+        int[] beats = new int[mDownBeats.size()];
+        for(int i = 0; i < mDownBeats.size(); i++) {
+            beats[i] = mDownBeats.get(i);
+        }
+        return beats;
+    }
 
     public List<Integer> getDownBeats() {
         return mDownBeats;

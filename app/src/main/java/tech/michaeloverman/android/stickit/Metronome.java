@@ -91,10 +91,10 @@ public class Metronome {
     public void play(PieceOfMusic p, int tempo) {
         Log.d(TAG, "metronome play()");
         mDelay = 60000 / tempo / p.getSubdivision();
-//        final int[] beats = p.getBeatsArray();
-//        final int[] downBeats = p.getDownBeatsArray();
-        final int[] beats = { 2,2,2,2,2,2,2 };
-        final int[] downBeats = { 2,3,2 };
+        final int[] beats = p.beatsArray();
+        final int[] downBeats = p.downBeatsArray();
+//        final int[] beats = { 2,2,2,2,2,2,2 };
+//        final int[] downBeats = { 2,3,2 };
 
 
         printArray(beats);
