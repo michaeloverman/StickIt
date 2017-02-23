@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import tech.michaeloverman.android.stickit.dialogs.PatternLengthDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.PatternSpacingDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.ProgrammedMetronomeDialogFragment;
@@ -64,16 +67,27 @@ public class StickItFragment extends Fragment {
     private boolean mMetronomeRunning;
 
     private PieceOfMusic mCirone12;
+
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mPiecesDatabaseReference;
+
+
     private PieceOfMusic getCirone12() {
-        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 12");
-        p.setAuthor("Anthony Cirone");
+        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 16");
+        p.setAuthor("Cirone, Anthony");
         p.setSubdivision(4);
 //        p.setBeats(HardData.testPatternBeats);
         p.setBeats(HardData.cirone16Beats);
 //        p.setDownBeats(HardData.testPatternDownBeats);
         p.setDownBeats(HardData.cirone16DownBeats);
+
+        mDatabase = FirebaseDatabase.getInstance();
+        mPiecesDatabaseReference = mDatabase.getReference().child("pieces");
+        mPiecesDatabaseReference.push().setValue(p);
+
         return p;
     }
+
 
     public static Fragment newInstance() { return new StickItFragment(); }
 

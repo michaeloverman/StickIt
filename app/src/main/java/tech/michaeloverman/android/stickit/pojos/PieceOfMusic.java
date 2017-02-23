@@ -2,6 +2,9 @@ package tech.michaeloverman.android.stickit.pojos;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Michael on 2/20/2017.
  */
@@ -11,8 +14,8 @@ public class PieceOfMusic {
     private static final String TAG = PieceOfMusic.class.getSimpleName();
     private String mTitle;
     private String mAuthor;
-    private int[] mBeats;
-    private int[] mDownBeats;
+    private List<Integer> mBeats;
+    private List<Integer> mDownBeats;
     private int mSubdivision;
     private int mCountOffMeasureLength;
 
@@ -20,6 +23,8 @@ public class PieceOfMusic {
         Log.d(TAG, "PieceOfMusic constructor()");
         mTitle = title;
     }
+
+    public PieceOfMusic() { }
 
     public String getAuthor() {
         return mAuthor;
@@ -37,7 +42,15 @@ public class PieceOfMusic {
         mSubdivision = subdivision;
     }
 
-    public int[] getBeats() {
+//    public int[] getBeatsArray() {
+//        int[] beats = new int[mBeats.size()];
+//        for(int i = 0; i < mBeats.size(); i++) {
+//            beats[i] = mBeats.get(i);
+//        }
+//        return beats;
+//    }
+
+    public List<Integer> getBeats() {
         return mBeats;
     }
 
@@ -50,8 +63,12 @@ public class PieceOfMusic {
     public void setBeats(int[] beats) {
 //        insureLCD(beats);
         int[] countoff = buildCountoff(beats[0]);
-        mBeats = combine(countoff, beats);
-        printArray(mBeats);
+        int[] allBeats = combine(countoff, beats);
+        mBeats = new ArrayList<>();
+        for(int i = 0; i < allBeats.length; i++) {
+            mBeats.add(allBeats[i]);
+        }
+//        printArray(mBeats);
     }
 
     private void printArray(int[] array) {
@@ -87,7 +104,15 @@ public class PieceOfMusic {
         return combination;
     }
 
-    public int[] getDownBeats() {
+//    public int[] getDownBeatsArray() {
+//        int[] beats = new int[mDownBeats.size()];
+//        for(int i = 0; i < mDownBeats.size(); i++) {
+//            beats[i] = mDownBeats.get(i);
+//        }
+//        return beats;
+//    }
+
+    public List<Integer> getDownBeats() {
         return mDownBeats;
     }
 
@@ -95,6 +120,10 @@ public class PieceOfMusic {
         int[] allDownBeats = new int[downBeats.length + 1];
         allDownBeats[0] = mCountOffMeasureLength;
         System.arraycopy(downBeats, 0, allDownBeats, 1, downBeats.length);
-        mDownBeats = allDownBeats;
+
+        mDownBeats = new ArrayList<>();
+        for (int i = 0; i < allDownBeats.length; i++) {
+            mDownBeats.add(allDownBeats[i]);
+        }
     }
 }
