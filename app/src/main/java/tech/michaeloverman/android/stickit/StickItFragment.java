@@ -25,6 +25,9 @@ import android.widget.TextView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import tech.michaeloverman.android.stickit.dialogs.PatternLengthDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.PatternSpacingDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.ProgrammedMetronomeDialogFragment;
@@ -73,17 +76,24 @@ public class StickItFragment extends Fragment {
 
 
     private PieceOfMusic getCirone12() {
-        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 17");
+        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 12");
         p.setAuthor("Cirone, Anthony");
-        p.setSubdivision(3);
+        p.setSubdivision(2);
 //        p.setBeats(HardData.testPatternBeats);
-        p.setBeats(HardData.cirone17Beats);
+        p.setBeats(HardData.cirone12Beats);
 //        p.setDownBeats(HardData.testPatternDownBeats);
-        p.setDownBeats(HardData.cirone17DownBeats);
+        p.setDownBeats(HardData.cirone12DownBeats);
 
         mDatabase = FirebaseDatabase.getInstance();
-        mPiecesDatabaseReference = mDatabase.getReference().child("pieces");
-        mPiecesDatabaseReference.push().setValue(p);
+        mPiecesDatabaseReference = mDatabase.getReference();
+
+        String key = mPiecesDatabaseReference.child("pieces").push().getKey();
+//        Map<String, Object> values = p.toMap();
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("/pieces/" + key, p);
+        updates.put("/composers/" + p.getAuthor() + "/" + p.getTitle(), key);
+        mPiecesDatabaseReference.updateChildren(updates);
 
         return p;
     }

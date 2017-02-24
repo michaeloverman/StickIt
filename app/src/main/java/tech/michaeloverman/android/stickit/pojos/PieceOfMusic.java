@@ -70,7 +70,7 @@ public class PieceOfMusic {
      */
     public void setBeats(int[] beats) {
 //        insureLCD(beats);
-        int[] countoff = buildCountoff(beats[0]);
+        int[] countoff = buildCountoff(mSubdivision);
         int[] allBeats = combine(countoff, beats);
         mBeats = new ArrayList<>();
         for(int i = 0; i < allBeats.length; i++) {
