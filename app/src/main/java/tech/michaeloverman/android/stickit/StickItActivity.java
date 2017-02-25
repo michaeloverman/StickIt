@@ -14,7 +14,7 @@ public class StickItActivity extends tech.michaeloverman.android.stickit.SingleF
     @Override
     protected Fragment createFragment() {
         System.out.println("StickItActivity createFragment()");
-        return StickItFragment.newInstance();
+        return MetronomeSelectorFragment.newInstance();
     }
 
     @Override

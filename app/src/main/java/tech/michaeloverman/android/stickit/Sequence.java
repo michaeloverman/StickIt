@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import tech.michaeloverman.android.stickit.pojos.HardData;
+
 /**
  * Created by Michael on 5/18/2016.
  */

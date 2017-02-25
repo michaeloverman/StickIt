@@ -17,6 +17,7 @@ public class PieceOfMusic {
     private List<Integer> mBeats;
     private List<Integer> mDownBeats;
     private int mSubdivision;
+    private int mCountOffSubdivision;
     private int mCountOffMeasureLength;
 
     public PieceOfMusic(String title) {
@@ -48,6 +49,15 @@ public class PieceOfMusic {
 
     public void setSubdivision(int subdivision) {
         mSubdivision = subdivision;
+        mCountOffSubdivision = mSubdivision;
+    }
+
+    public int getCountOffSubdivision() {
+        return mCountOffSubdivision;
+    }
+
+    public void setCountOffSubdivision(int countOffSubdivision) {
+        mCountOffSubdivision = countOffSubdivision;
     }
 
     public int[] beatsArray() {
@@ -69,7 +79,6 @@ public class PieceOfMusic {
      * @param beats
      */
     public void setBeats(int[] beats) {
-//        insureLCD(beats);
         int[] countoff = buildCountoff(mSubdivision);
         int[] allBeats = combine(countoff, beats);
         mBeats = new ArrayList<>();
@@ -77,6 +86,34 @@ public class PieceOfMusic {
             mBeats.add(allBeats[i]);
         }
 //        printArray(mBeats);
+    }
+
+    public void setBeatsWithDoubles(double[] beats) {
+        int[] bigbeats = new int[beats.length];
+        for(int i = 0; i < beats.length; i++) {
+            bigbeats[i] = (int) (beats[i] * 100);
+        }
+        int gcd = findGCD(bigbeats);
+        for(int i = 0; i < bigbeats.length; i++) {
+            bigbeats[i] /= gcd;
+        }
+        mCountOffSubdivision = mSubdivision;
+        mSubdivision = mSubdivision * 100 / gcd;
+        setBeats(bigbeats);
+    }
+
+    private int findGCD(int[] input) {
+        int result = input[0];
+        for(int i = 0; i < input.length; i++) result = findGCD(result, input[i]);
+        return result;
+    }
+    private int findGCD(int a, int b) {
+        while (b > 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
     }
 
     private void printArray(int[] array) {
@@ -88,15 +125,15 @@ public class PieceOfMusic {
     }
 
     /** Uses the 'length' of first beat to generate count off measure */
-    private int[] buildCountoff(int firstBeat) {
-        mCountOffMeasureLength = COUNTOFF_LENGTH + firstBeat - 1;
+    private int[] buildCountoff(int subdivision) {
+        mCountOffMeasureLength = COUNTOFF_LENGTH + subdivision - 1;
         int[] countOff = new int[mCountOffMeasureLength];
         int i;
         for (i = 0; i < countOff.length; ) {
             if (i != COUNTOFF_LENGTH - 2) {
-                countOff[i++] = firstBeat;
+                countOff[i++] = subdivision;
             } else {
-                for (int j = 0; j < firstBeat; j++) {
+                for (int j = 0; j < subdivision; j++) {
                     countOff[i++] = 1;
                 }
             }

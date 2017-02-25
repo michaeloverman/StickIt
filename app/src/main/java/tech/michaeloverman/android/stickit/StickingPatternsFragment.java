@@ -33,17 +33,18 @@ import tech.michaeloverman.android.stickit.dialogs.PatternSpacingDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.ProgrammedMetronomeDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.StonePatternsDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.TempoMarkingDialogFragment;
+import tech.michaeloverman.android.stickit.pojos.HardData;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
 
 /**
  * Created by Michael on 5/18/2016.
  */
-public class StickItFragment extends Fragment {
+public class StickingPatternsFragment extends Fragment {
     private static final int REQUEST_STONE_PATTERNS = 8;
     private static final String DIALOG_STONE = "DialogStone";
     private static final int REQUEST_TEMPO_MARKING = 120;
     private static final String DIALOG_TEMPO = "DialogTempo";
-    private static final String TAG = StickItFragment.class.getSimpleName();
+    private static final String TAG = StickingPatternsFragment.class.getSimpleName();
 
     private static final String DIALOG_PATTERN = "DialogPattern";
     private static final int REQUEST_PATTERN_LENGTH = 4;
@@ -76,13 +77,13 @@ public class StickItFragment extends Fragment {
 
 
     private PieceOfMusic getCirone12() {
-        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 12");
+        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 21");
         p.setAuthor("Cirone, Anthony");
         p.setSubdivision(2);
 //        p.setBeats(HardData.testPatternBeats);
-        p.setBeats(HardData.cirone12Beats);
+        p.setBeats(HardData.cirone21Beats);
 //        p.setDownBeats(HardData.testPatternDownBeats);
-        p.setDownBeats(HardData.cirone12DownBeats);
+        p.setDownBeats(HardData.cirone21DownBeats);
 
         mDatabase = FirebaseDatabase.getInstance();
         mPiecesDatabaseReference = mDatabase.getReference();
@@ -99,7 +100,7 @@ public class StickItFragment extends Fragment {
     }
 
 
-    public static Fragment newInstance() { return new StickItFragment(); }
+    public static Fragment newInstance() { return new StickingPatternsFragment(); }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,7 +114,7 @@ public class StickItFragment extends Fragment {
         mDoingStones = false;
         mMetronome = new Metronome(getActivity());
         mMetronomeRunning = false;
-        mCirone12 = getCirone12();
+//        mCirone12 = getCirone12();
     }
 
     @Nullable
@@ -283,7 +284,7 @@ public class StickItFragment extends Fragment {
     private void newTempoMarking() {
         FragmentManager manager = getFragmentManager();
         DialogFragment dialog = TempoMarkingDialogFragment.newInstance(mTempo);
-        dialog.setTargetFragment(StickItFragment.this, REQUEST_TEMPO_MARKING);
+        dialog.setTargetFragment(StickingPatternsFragment.this, REQUEST_TEMPO_MARKING);
         dialog.show(manager, DIALOG_TEMPO);
 
     }
@@ -296,22 +297,22 @@ public class StickItFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.set_pattern_length:
                 dialog = new PatternLengthDialogFragment();
-                dialog.setTargetFragment(StickItFragment.this, REQUEST_PATTERN_LENGTH);
+                dialog.setTargetFragment(StickingPatternsFragment.this, REQUEST_PATTERN_LENGTH);
                 dialog.show(manager, DIALOG_PATTERN);
                 return true;
             case R.id.set_pattern_spacing:
                 dialog = new PatternSpacingDialogFragment();
-                dialog.setTargetFragment(StickItFragment.this, REQUEST_PATTERN_SPACING);
+                dialog.setTargetFragment(StickingPatternsFragment.this, REQUEST_PATTERN_SPACING);
                 dialog.show(manager, DIALOG_SPACING);
                 return true;
             case R.id.stone_patterns:
                 dialog = new StonePatternsDialogFragment();
-                dialog.setTargetFragment(StickItFragment.this, REQUEST_STONE_PATTERNS);
+                dialog.setTargetFragment(StickingPatternsFragment.this, REQUEST_STONE_PATTERNS);
                 dialog.show(manager, DIALOG_STONE);
                 return true;
             case R.id.programmed_metronome:
                 dialog = new ProgrammedMetronomeDialogFragment();
-                dialog.setTargetFragment(StickItFragment.this, REQUEST_CUSTOM_METRONOME);
+                dialog.setTargetFragment(StickingPatternsFragment.this, REQUEST_CUSTOM_METRONOME);
                 dialog.show(manager, DIALOG_CUSTOM);
             default:
                 return super.onOptionsItemSelected(item);
