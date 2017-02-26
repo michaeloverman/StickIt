@@ -2,7 +2,6 @@ package tech.michaeloverman.android.stickit.pojos;
 
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,10 +59,10 @@ public class PieceOfMusic {
         mCountOffSubdivision = countOffSubdivision;
     }
 
-    public int[] beatsArray() {
-        int[] beats = new int[mBeats.size()];
-        for(int i = 0; i < mBeats.size(); i++) {
-            beats[i] = mBeats.get(i);
+    public static int[] beatsListToArray(List<Integer> beatsList) {
+        int[] beats = new int[beatsList.size()];
+        for(int i = 0; i < beatsList.size(); i++) {
+            beats[i] = beatsList.get(i);
         }
         return beats;
     }
@@ -78,43 +77,44 @@ public class PieceOfMusic {
      *
      * @param beats
      */
-    public void setBeats(int[] beats) {
-        int[] countoff = buildCountoff(mSubdivision);
-        int[] allBeats = combine(countoff, beats);
-        mBeats = new ArrayList<>();
-        for(int i = 0; i < allBeats.length; i++) {
-            mBeats.add(allBeats[i]);
-        }
+    public void setBeats(List<Integer> beats) {
+//        int[] countoff = buildCountoff(mSubdivision);
+//        int[] allBeats = combine(countoff, beats);
+//        mBeats = new ArrayList<>();
+//        for(int i = 0; i < allBeats.length; i++) {
+//            mBeats.add(allBeats[i]);
+//        }
 //        printArray(mBeats);
+        mBeats = beats;
     }
 
-    public void setBeatsWithDoubles(double[] beats) {
-        int[] bigbeats = new int[beats.length];
-        for(int i = 0; i < beats.length; i++) {
-            bigbeats[i] = (int) (beats[i] * 100);
-        }
-        int gcd = findGCD(bigbeats);
-        for(int i = 0; i < bigbeats.length; i++) {
-            bigbeats[i] /= gcd;
-        }
-        mCountOffSubdivision = mSubdivision;
-        mSubdivision = mSubdivision * 100 / gcd;
-        setBeats(bigbeats);
-    }
+//    public void setBeatsWithDoubles(double[] beats) {
+//        int[] bigbeats = new int[beats.length];
+//        for(int i = 0; i < beats.length; i++) {
+//            bigbeats[i] = (int) (beats[i] * 100);
+//        }
+//        int gcd = findGCD(bigbeats);
+//        for(int i = 0; i < bigbeats.length; i++) {
+//            bigbeats[i] /= gcd;
+//        }
+//        mCountOffSubdivision = mSubdivision;
+//        mSubdivision = mSubdivision * 100 / gcd;
+//        setBeats(bigbeats);
+//    }
 
-    private int findGCD(int[] input) {
-        int result = input[0];
-        for(int i = 0; i < input.length; i++) result = findGCD(result, input[i]);
-        return result;
-    }
-    private int findGCD(int a, int b) {
-        while (b > 0) {
-            int temp = b;
-            b = a % b;
-            a = temp;
-        }
-        return a;
-    }
+//    private int findGCD(int[] input) {
+//        int result = input[0];
+//        for(int i = 0; i < input.length; i++) result = findGCD(result, input[i]);
+//        return result;
+//    }
+//    private int findGCD(int a, int b) {
+//        while (b > 0) {
+//            int temp = b;
+//            b = a % b;
+//            a = temp;
+//        }
+//        return a;
+//    }
 
     private void printArray(int[] array) {
         StringBuilder sb = new StringBuilder();
@@ -149,26 +149,20 @@ public class PieceOfMusic {
         return combination;
     }
 
-    public int[] downBeatsArray() {
-        int[] beats = new int[mDownBeats.size()];
-        for(int i = 0; i < mDownBeats.size(); i++) {
-            beats[i] = mDownBeats.get(i);
-        }
-        return beats;
-    }
 
     public List<Integer> getDownBeats() {
         return mDownBeats;
     }
 
-    public void setDownBeats(int[] downBeats) {
-        int[] allDownBeats = new int[downBeats.length + 1];
-        allDownBeats[0] = mCountOffMeasureLength;
-        System.arraycopy(downBeats, 0, allDownBeats, 1, downBeats.length);
-
-        mDownBeats = new ArrayList<>();
-        for (int i = 0; i < allDownBeats.length; i++) {
-            mDownBeats.add(allDownBeats[i]);
-        }
+    public void setDownBeats(List<Integer> downBeats) {
+//        int[] allDownBeats = new int[downBeats.length + 1];
+//        allDownBeats[0] = mCountOffMeasureLength;
+//        System.arraycopy(downBeats, 0, allDownBeats, 1, downBeats.length);
+//
+//        mDownBeats = new ArrayList<>();
+//        for (int i = 0; i < allDownBeats.length; i++) {
+//            mDownBeats.add(allDownBeats[i]);
+//        }
+        mDownBeats = downBeats;
     }
 }
