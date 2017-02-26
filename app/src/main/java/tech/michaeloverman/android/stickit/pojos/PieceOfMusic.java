@@ -59,14 +59,6 @@ public class PieceOfMusic {
         mCountOffSubdivision = countOffSubdivision;
     }
 
-    public static int[] beatsListToArray(List<Integer> beatsList) {
-        int[] beats = new int[beatsList.size()];
-        for(int i = 0; i < beatsList.size(); i++) {
-            beats[i] = beatsList.get(i);
-        }
-        return beats;
-    }
-
     public List<Integer> getBeats() {
         return mBeats;
     }
@@ -116,13 +108,6 @@ public class PieceOfMusic {
 //        return a;
 //    }
 
-    private void printArray(int[] array) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < array.length; i++) {
-            sb.append(array[i] + ", ");
-        }
-        Log.d(TAG, sb.toString());
-    }
 
     /** Uses the 'length' of first beat to generate count off measure */
     private int[] buildCountoff(int subdivision) {
@@ -148,7 +133,6 @@ public class PieceOfMusic {
         System.arraycopy(beats, 0, combination, countoff.length, beats.length);
         return combination;
     }
-
 
     public List<Integer> getDownBeats() {
         return mDownBeats;

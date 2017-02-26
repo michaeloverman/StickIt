@@ -14,6 +14,7 @@ import java.util.List;
 
 import tech.michaeloverman.android.stickit.pojos.Click;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
+import tech.michaeloverman.android.stickit.utils.MetronomeUtilities;
 
 /**
  * Created by Michael on 10/6/2016.
@@ -80,25 +81,17 @@ public class Metronome {
         mTimer.start();
     }
 
-    private void printArray(int[] array) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < array.length; i++) {
-            sb.append(array[i] + ", ");
-        }
-        Log.d(TAG, sb.toString());
-    }
-
     public void play(PieceOfMusic p, int tempo) {
         Log.d(TAG, "metronome play()");
         mDelay = 60000 / tempo / p.getSubdivision();
-        final int[] beats = PieceOfMusic.beatsListToArray(p.getBeats());
-        final int[] downBeats = PieceOfMusic.beatsListToArray(p.getDownBeats());
+        final int[] beats = MetronomeUtilities.integerListToArray(p.getBeats());
+        final int[] downBeats = MetronomeUtilities.integerListToArray(p.getDownBeats());
 //        final int[] beats = { 2,2,2,2,2,2,2 };
 //        final int[] downBeats = { 2,3,2 };
 
 
-        printArray(beats);
-        printArray(downBeats);
+        MetronomeUtilities.printArray(beats);
+        MetronomeUtilities.printArray(downBeats);
 
         mClickId = mClicks.get(0).getSoundId();
         mHiClickId = mClicks.get(1).getSoundId();

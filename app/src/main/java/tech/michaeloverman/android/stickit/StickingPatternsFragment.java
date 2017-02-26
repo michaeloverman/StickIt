@@ -234,7 +234,7 @@ public class StickingPatternsFragment extends Fragment {
         } else {
             mMetronomeRunning = true;
             mStartButton.setText(R.string.stop);
-            mMetronome.play(mCirone12, mTempo);
+            mMetronome.play(mTempo);
         }
     }
 

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -37,11 +38,15 @@ public class PreprogrammedMetronomeFragment extends Fragment
     private List<TitleKeyObject> mPiecesList;
     private int mCurrentTempo = 120;
     private String mCurrentComposer;
+    private Metronome mMetronome;
+    private boolean mMetronomeRunning;
 
     @BindView(R.id.current_program_title)
     TextView mTVCurrentPiece;
     @BindView(R.id.current_tempo_setting)
     TextView mTVCurrentTempo;
+    @BindView(R.id.start_stop_button)
+    Button mStartStopButton;
     @BindView(R.id.tempo_up_button)
     ImageButton mTempoUpButton;
     @BindView(R.id.tempo_down_button)
@@ -62,6 +67,8 @@ public class PreprogrammedMetronomeFragment extends Fragment
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        mMetronome = new Metronome(getActivity());
+        mMetronomeRunning = false;
 
     }
 
@@ -104,6 +111,19 @@ public class PreprogrammedMetronomeFragment extends Fragment
     public void decreaseTempo() {
         mCurrentTempo--;
         updateTempoView();
+    }
+
+    @OnClick(R.id.start_stop_button)
+    public void startStop() {
+        if(mMetronomeRunning) {
+            mMetronome.stop();
+            mMetronomeRunning = false;
+            mStartStopButton.setText("Start");
+        } else {
+            mMetronomeRunning = true;
+            mStartStopButton.setText("Stop");
+            mMetronome.play(mCurrentPiece, mCurrentTempo);
+        }
     }
 
     @Override
@@ -161,7 +181,6 @@ public class PreprogrammedMetronomeFragment extends Fragment
     private void updateProgram() {
         // TODO set TitleViews etc
         mTVCurrentPiece.setText(mCurrentPiece.getTitle());
-        // TODO set click data
 
     }
 
