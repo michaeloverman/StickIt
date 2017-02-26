@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,6 +46,8 @@ public class PreprogrammedMetronomeFragment extends Fragment
     ImageButton mTempoUpButton;
     @BindView(R.id.tempo_down_button)
     ImageButton mTempoDownButton;
+    @BindView(R.id.other_pieces_label)
+    TextView mWorkTitlesLabel;
     @BindView(R.id.piece_list_recycler_view)
     RecyclerView mPiecesRecyclerView;
     private WorksListAdapter mAdapter;
@@ -125,7 +128,9 @@ public class PreprogrammedMetronomeFragment extends Fragment
                         for (DataSnapshot snap : pieceList) {
                             list.add(new TitleKeyObject(snap.getKey(), snap.getValue().toString()));
                         }
+                        Collections.sort(list);
                         mAdapter.setTitles(list);
+                        mWorkTitlesLabel.setText(getString(R.string.work_titles_label, mCurrentComposer));
                     }
 
                     @Override
@@ -155,7 +160,9 @@ public class PreprogrammedMetronomeFragment extends Fragment
 
     private void updateProgram() {
         // TODO set TitleViews etc
+        mTVCurrentPiece.setText(mCurrentPiece.getTitle());
         // TODO set click data
+
     }
 
 

@@ -95,7 +95,7 @@
 
     <TextView
         android:id="@+id/other_pieces_label"
-        android:text="Other works by current composer:"
+        android:text="Works by %s:"
         app:layout_constraintTop_toBottomOf="@+id/start_stop_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

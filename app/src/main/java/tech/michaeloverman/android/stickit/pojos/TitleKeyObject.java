@@ -1,5 +1,6 @@
 package tech.michaeloverman.android.stickit.pojos;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 
@@ -7,7 +8,7 @@ import android.util.Log;
  * Created by Michael on 2/25/2017.
  */
 
-public class TitleKeyObject {
+public class TitleKeyObject implements Comparable {
     private static final String TAG = TitleKeyObject.class.getSimpleName();
 
     String mTitle;
@@ -33,5 +34,11 @@ public class TitleKeyObject {
 
     public void setKey(String key) {
         mKey = key;
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        TitleKeyObject other = (TitleKeyObject) o;
+        return mTitle.compareTo(other.mTitle);
     }
 }

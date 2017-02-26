@@ -29,6 +29,7 @@
     <string name="stop">Stop</string>
     <string name="programmed_metronome">Programmed Metronome</string>
     <string name="choose_etude">Select an etude</string>
+    <string name="work_titles_label">Works by %s:</string>
     <string-array name="spacing_options">
         <item>None (RLRLRLR)</item>
         <item>Paired Big-Small (RLRL RLR)</item>
