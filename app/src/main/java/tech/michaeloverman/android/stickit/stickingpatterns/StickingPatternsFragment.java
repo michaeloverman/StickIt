@@ -1,4 +1,4 @@
-package tech.michaeloverman.android.stickit;
+package tech.michaeloverman.android.stickit.stickingpatterns;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -25,6 +25,8 @@ import android.widget.TextView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import tech.michaeloverman.android.stickit.Metronome;
+import tech.michaeloverman.android.stickit.R;
 import tech.michaeloverman.android.stickit.dialogs.PatternLengthDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.PatternSpacingDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.ProgrammedMetronomeDialogFragment;

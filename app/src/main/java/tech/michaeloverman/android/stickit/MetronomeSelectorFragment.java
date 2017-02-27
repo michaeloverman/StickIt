@@ -14,6 +14,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import tech.michaeloverman.android.stickit.programmed.PreprogrammedMetronomeFragment;
+import tech.michaeloverman.android.stickit.stickingpatterns.StickingPatternsFragment;
 
 /**
  * Created by Michael on 2/24/2017.

@@ -14,7 +14,7 @@ import java.util.List;
 
 import tech.michaeloverman.android.stickit.pojos.Click;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
-import tech.michaeloverman.android.stickit.utils.MetronomeUtilities;
+import tech.michaeloverman.android.stickit.utils.Utilities;
 
 /**
  * Created by Michael on 10/6/2016.
@@ -25,15 +25,24 @@ public class Metronome {
     private static final String SOUNDS_FOLDER = "sample_sounds";
     private static final long TWENTY_MINUTES = 60000 * 20;
 
+    /* Sounds and Such */
     private AssetManager mAssets;
     private List<Click> mClicks = new ArrayList<>();
     private SoundPool mSoundPool;
     private Integer mClickId;
     private Integer mHiClickId, mLoClickId;
-    private long mDelay;
 
+    /* Timer, clicker variables */
+    private CountDownTimer mTimer;
+    private long mDelay;
     private boolean mClicking;
 
+    /**
+     * Constructor accepts context, though for what is not immediately apparent.
+     * Loads sound files for clicking...
+     *
+     * @param context
+     */
     public Metronome(Context context) {
         mAssets = context.getAssets();
         mClicking = false;
@@ -41,22 +50,12 @@ public class Metronome {
         loadSounds();
     }
 
-//    Runnable mClicker = new Runnable() {
-//        @Override
-//        public void run() {
-//            try {
-//                while(mClicking) {
-//                    mSoundPool.play(mClickId, 1.0f, 1.0f, 1, 0, 1.0f);
-//                    wait(mDelay);
-//                }
-//            } catch (InterruptedException ie) {
-//            }
-//        }
-//
-//    };
-
-    CountDownTimer mTimer;
-
+    /**
+     * Simple metronome click, takes tempo, establishes simple timer, and clicks at
+     * defined intervals.
+     *
+     * @param tempo
+     */
     public void play(int tempo) {
         mDelay = 60000 / tempo;
         mClickId = mClicks.get(0).getSoundId();
@@ -69,9 +68,8 @@ public class Metronome {
         mTimer = new CountDownTimer(TWENTY_MINUTES, mDelay) {
             @Override
             public void onTick(long millisUntilFinished) {
-                    mSoundPool.play(mClickId, 1.0f, 1.0f, 1, 0, 1.0f);
+                mSoundPool.play(mClickId, 1.0f, 1.0f, 1, 0, 1.0f);
             }
-//
 
             @Override
             public void onFinish() {
@@ -81,48 +79,54 @@ public class Metronome {
         mTimer.start();
     }
 
+    /**
+     * Programmed click, accepts a PieceOfMusic to define changing click patterns, and a
+     * tempo marking.
+     * @param p
+     * @param tempo
+     */
     public void play(PieceOfMusic p, int tempo) {
         Log.d(TAG, "metronome play()");
         mDelay = 60000 / tempo / p.getSubdivision();
-        final int[] beats = MetronomeUtilities.integerListToArray(p.getBeats());
-        final int[] downBeats = MetronomeUtilities.integerListToArray(p.getDownBeats());
-//        final int[] beats = { 2,2,2,2,2,2,2 };
-//        final int[] downBeats = { 2,3,2 };
+        final int[] beats = Utilities.integerListToArray(p.getBeats());
+        final int[] downBeats = Utilities.integerListToArray(p.getDownBeats());
 
+//        Utilities.printArray(beats);
+//        Utilities.printArray(downBeats);
 
-        MetronomeUtilities.printArray(beats);
-        MetronomeUtilities.printArray(downBeats);
-
-        mClickId = mClicks.get(0).getSoundId();
+        mClickId = mClicks.get(0).getSoundId(); // not using this sound at the moment...
         mHiClickId = mClicks.get(1).getSoundId();
         mLoClickId = mClicks.get(2).getSoundId();
+        // if the sounds don't load properly, quit while you can...
         if (mClickId == null) {
             return;
         }
 
         mTimer = new CountDownTimer(TWENTY_MINUTES, mDelay) {
-            int count = 0;
-            int nextClick = 0;
-            int clickPointer = 0;
-            int beatsPerMeasureCount = 0;
-            int downBeatPointer = 0;
+            int nextClick = 0;  // number of subdivisions in 'this' beat, before next click
+            int count = 0;      // count of subdivisions since last click
+            int beatPointer = 0; // pointer to move through beats array
+            int beatsPerMeasureCount = 0; // count of beats since last downbeat
+            int measurePointer = 0; //pointer to move through downbeats array
 
             @Override
             public void onTick(long millisUntilFinished) {
                 if (count == nextClick) {
-                    if(beatsPerMeasureCount == 0) {
+                    if(beatsPerMeasureCount == 0) { // It's a downbeat!
                         mSoundPool.play(mHiClickId, 1.0f, 1.0f, 1, 0, 1.0f);
-                        beatsPerMeasureCount = downBeats[downBeatPointer++];
-                    } else {
+                        // start counting until next downbeat
+                        beatsPerMeasureCount = downBeats[measurePointer++];
+                    } else { // inner beat
                         mSoundPool.play(mLoClickId, 1.0f, 1.0f, 1, 0, 1.0f);
                     }
-                    if(clickPointer == beats.length - 1) {
+                    // if we've reached the end of the piece, stop the metronome.
+                    if(beatPointer == beats.length - 1) {
                         stop();
                     }
-                    nextClick += beats[clickPointer++];
-                    beatsPerMeasureCount--;
+                    nextClick += beats[beatPointer++]; // set the subdivision counter for next beat
+                    beatsPerMeasureCount--; // count down one beat in the measure
                 }
-                count++;
+                count++; // count one subdivision gone by...
 
             }
 

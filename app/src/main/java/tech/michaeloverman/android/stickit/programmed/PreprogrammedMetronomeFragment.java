@@ -1,4 +1,4 @@
-package tech.michaeloverman.android.stickit;
+package tech.michaeloverman.android.stickit.programmed;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +27,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import tech.michaeloverman.android.stickit.Metronome;
+import tech.michaeloverman.android.stickit.R;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
 import tech.michaeloverman.android.stickit.pojos.TitleKeyObject;
 

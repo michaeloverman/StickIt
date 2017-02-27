@@ -8,8 +8,8 @@ import java.util.List;
  * Created by Michael on 2/26/2017.
  */
 
-public class MetronomeUtilities {
-    public static final String TAG = MetronomeUtilities.class.getSimpleName();
+public class Utilities {
+    public static final String TAG = Utilities.class.getSimpleName();
 
     public static int[] integerListToArray(List<Integer> integerList) {
         int[] ints = new int[integerList.size()];

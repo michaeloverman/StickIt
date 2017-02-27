@@ -1,4 +1,4 @@
-package tech.michaeloverman.android.stickit;
+package tech.michaeloverman.android.stickit.programmed;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tech.michaeloverman.android.stickit.R;
 
 /**
  * This fragment gets the complete list of composer names from Firebase database, and
