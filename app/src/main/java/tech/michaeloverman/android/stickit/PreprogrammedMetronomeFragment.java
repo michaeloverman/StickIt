@@ -3,14 +3,17 @@ package tech.michaeloverman.android.stickit;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,12 +35,15 @@ import tech.michaeloverman.android.stickit.pojos.TitleKeyObject;
  */
 
 public class PreprogrammedMetronomeFragment extends Fragment
-        implements WorksListAdapter.WorksListAdapterOnClickHandler {
+        implements WorksListAdapter.WorksListAdapterOnClickHandler,
+        SelectComposerFragment.ComposerCallback {
+    private static final String TAG = PreprogrammedMetronomeFragment.class.getSimpleName();
+    private static final int NEW_COMPOSER_REQUEST_CODE = 1992;
 
     private PieceOfMusic mCurrentPiece;
     private List<TitleKeyObject> mPiecesList;
     private int mCurrentTempo = 120;
-    private String mCurrentComposer;
+    private String mCurrentComposer = "Cirone, Anthony";
     private Metronome mMetronome;
     private boolean mMetronomeRunning;
 
@@ -55,6 +61,9 @@ public class PreprogrammedMetronomeFragment extends Fragment
     TextView mWorkTitlesLabel;
     @BindView(R.id.piece_list_recycler_view)
     RecyclerView mPiecesRecyclerView;
+    @BindView(R.id.select_composer_button)
+    Button mSelectComposer;
+
     private WorksListAdapter mAdapter;
 
     public static Fragment newInstance() {
@@ -91,7 +100,7 @@ public class PreprogrammedMetronomeFragment extends Fragment
         mPiecesRecyclerView.setAdapter(mAdapter);
         mPiecesRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
-        mCurrentComposer = "Cirone, Anthony";
+//        mCurrentComposer = "Cirone, Anthony";
         composerSelected(mCurrentComposer);
 
         return view;
@@ -120,10 +129,24 @@ public class PreprogrammedMetronomeFragment extends Fragment
             mMetronomeRunning = false;
             mStartStopButton.setText("Start");
         } else {
+            if(mCurrentPiece == null) {
+                Toast.makeText(this.getContext(), "Select a piece to program metronome", Toast.LENGTH_SHORT).show();
+                return;
+            }
             mMetronomeRunning = true;
             mStartStopButton.setText("Stop");
             mMetronome.play(mCurrentPiece, mCurrentTempo);
         }
+    }
+
+    @OnClick(R.id.select_composer_button)
+    public void selectComposer() {
+        mCurrentPiece = null;
+        Fragment fragment = SelectComposerFragment.newInstance(this);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -151,6 +174,7 @@ public class PreprogrammedMetronomeFragment extends Fragment
                         Collections.sort(list);
                         mAdapter.setTitles(list);
                         mWorkTitlesLabel.setText(getString(R.string.work_titles_label, mCurrentComposer));
+                        onClick(list.get(0).getKey());
                     }
 
                     @Override
@@ -185,4 +209,9 @@ public class PreprogrammedMetronomeFragment extends Fragment
     }
 
 
+    @Override
+    public void newComposer(String name) {
+        Log.d(TAG, "newComposer() callback");
+        mCurrentComposer = name;
+    }
 }

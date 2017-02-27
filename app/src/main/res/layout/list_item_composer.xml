@@ -3,13 +3,11 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
-
     <TextView
-        android:id="@+id/work_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/composer_name_tv"
+        android:textSize="@dimen/list_time_text_size"
         android:minHeight="@dimen/list_item_min_height"
         android:padding="@dimen/list_item_padding"
-        android:text="Temporary Filler Title"
-        android:textSize="@dimen/list_time_text_size"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
