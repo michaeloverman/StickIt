@@ -33,6 +33,7 @@ import tech.michaeloverman.android.stickit.dialogs.ProgrammedMetronomeDialogFrag
 import tech.michaeloverman.android.stickit.dialogs.StonePatternsDialogFragment;
 import tech.michaeloverman.android.stickit.dialogs.TempoMarkingDialogFragment;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
+import tech.michaeloverman.android.stickit.utils.MetronomeListener;
 
 /**
  * Created by Michael on 5/18/2016.
@@ -206,7 +207,7 @@ public class StickingPatternsFragment extends Fragment {
         return view;
     }
 
-    private void stopStartMetronome() {
+    public void stopStartMetronome() {
 
         if(mMetronomeRunning) {
             mMetronome.stop();

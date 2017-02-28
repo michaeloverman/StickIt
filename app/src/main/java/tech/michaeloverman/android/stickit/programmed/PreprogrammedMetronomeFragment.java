@@ -31,6 +31,7 @@ import tech.michaeloverman.android.stickit.Metronome;
 import tech.michaeloverman.android.stickit.R;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
 import tech.michaeloverman.android.stickit.pojos.TitleKeyObject;
+import tech.michaeloverman.android.stickit.utils.MetronomeListener;
 
 /**
  * Created by Michael on 2/24/2017.
@@ -38,7 +39,7 @@ import tech.michaeloverman.android.stickit.pojos.TitleKeyObject;
 
 public class PreprogrammedMetronomeFragment extends Fragment
         implements WorksListAdapter.WorksListAdapterOnClickHandler,
-        SelectComposerFragment.ComposerCallback {
+        SelectComposerFragment.ComposerCallback, MetronomeListener {
     private static final String TAG = PreprogrammedMetronomeFragment.class.getSimpleName();
 
     private PieceOfMusic mCurrentPiece;
@@ -77,7 +78,7 @@ public class PreprogrammedMetronomeFragment extends Fragment
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        mMetronome = new Metronome(getActivity());
+        mMetronome = new Metronome(getActivity(), this);
         mMetronomeRunning = false;
 
     }
@@ -124,7 +125,7 @@ public class PreprogrammedMetronomeFragment extends Fragment
     }
 
     @OnClick(R.id.start_stop_button)
-    public void startStop() {
+    public void metronomeStartStop() {
         if(mMetronomeRunning) {
             mMetronome.stop();
             mMetronomeRunning = false;

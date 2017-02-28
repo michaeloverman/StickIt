@@ -14,6 +14,7 @@ import java.util.List;
 
 import tech.michaeloverman.android.stickit.pojos.Click;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
+import tech.michaeloverman.android.stickit.utils.MetronomeListener;
 import tech.michaeloverman.android.stickit.utils.Utilities;
 
 /**
@@ -37,17 +38,23 @@ public class Metronome {
     private long mDelay;
     private boolean mClicking;
 
+    private MetronomeListener mListener;
+
     /**
      * Constructor accepts context, though for what is not immediately apparent.
      * Loads sound files for clicking...
      *
      * @param context
      */
-    public Metronome(Context context) {
+    public Metronome(Context context, MetronomeListener ml) {
         mAssets = context.getAssets();
+        mListener = ml;
         mClicking = false;
         mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         loadSounds();
+    }
+    public Metronome(Context context) {
+        this(context, null);
     }
 
     /**
@@ -122,6 +129,7 @@ public class Metronome {
                     // if we've reached the end of the piece, stop the metronome.
                     if(beatPointer == beats.length - 1) {
                         stop();
+                        mListener.metronomeStartStop();
                     }
                     nextClick += beats[beatPointer++]; // set the subdivision counter for next beat
                     beatsPerMeasureCount--; // count down one beat in the measure
@@ -133,6 +141,7 @@ public class Metronome {
             @Override
             public void onFinish() {
                 this.cancel();
+//                mListener.metronomeStartStop();
             }
         };
         mTimer.start();
