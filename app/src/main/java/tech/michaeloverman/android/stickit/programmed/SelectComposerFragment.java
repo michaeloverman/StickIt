@@ -89,6 +89,12 @@ public class SelectComposerFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        sComposerCallback = null;
+    }
+
     /**
      * Contact Firebase Database, get all the composer's names, attach to adapter for
      * recycler viewing

@@ -40,7 +40,6 @@ public class PreprogrammedMetronomeFragment extends Fragment
         implements WorksListAdapter.WorksListAdapterOnClickHandler,
         SelectComposerFragment.ComposerCallback {
     private static final String TAG = PreprogrammedMetronomeFragment.class.getSimpleName();
-    private static final int NEW_COMPOSER_REQUEST_CODE = 1992;
 
     private PieceOfMusic mCurrentPiece;
     private List<TitleKeyObject> mPiecesList;

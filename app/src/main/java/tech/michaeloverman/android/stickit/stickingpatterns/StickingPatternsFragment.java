@@ -74,28 +74,7 @@ public class StickingPatternsFragment extends Fragment {
     private DatabaseReference mPiecesDatabaseReference;
 
 
-//    private PieceOfMusic getCirone12() {
-//        PieceOfMusic p = new PieceOfMusic("Portraits in Rhythm 21");
-//        p.setAuthor("Cirone, Anthony");
-//        p.setSubdivision(2);
-////        p.setBeats(HardData.testPatternBeats);
-//        p.setBeats(HardData.cirone21Beats);
-////        p.setDownBeats(HardData.testPatternDownBeats);
-//        p.setDownBeats(HardData.cirone21DownBeats);
-//
-//        mDatabase = FirebaseDatabase.getInstance();
-//        mPiecesDatabaseReference = mDatabase.getReference();
-//
-//        String key = mPiecesDatabaseReference.child("pieces").push().getKey();
-////        Map<String, Object> values = p.toMap();
-//
-//        Map<String, Object> updates = new HashMap<>();
-//        updates.put("/pieces/" + key, p);
-//        updates.put("/composers/" + p.getAuthor() + "/" + p.getTitle(), key);
-//        mPiecesDatabaseReference.updateChildren(updates);
-//
-//        return p;
-//    }
+
 
 
     public static Fragment newInstance() { return new StickingPatternsFragment(); }

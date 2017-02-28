@@ -59,7 +59,7 @@ public class MetronomeSelectorFragment extends Fragment {
         mUnbinder.unbind();
     }
 
-    @OnClick( { R.id.normal_metronome_button,
+    @OnClick( { R.id.normal_metronome_button, R.id.create_new_program_button,
             R.id.sticking_patters_metronome_button, R.id.preprogrammed_metronome_button })
     public void buttonClicked(View button) {
         Log.d(TAG, "buttonClicked()");
@@ -73,6 +73,9 @@ public class MetronomeSelectorFragment extends Fragment {
                 break;
             case R.id.preprogrammed_metronome_button:
                 fragment = PreprogrammedMetronomeFragment.newInstance();
+                break;
+            case R.id.create_new_program_button:
+                fragment = DataEntryFragment.newInstance();
                 break;
             default:
                 fragment = null;
