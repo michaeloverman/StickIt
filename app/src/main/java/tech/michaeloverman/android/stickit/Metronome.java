@@ -98,6 +98,7 @@ public class Metronome {
         Log.d(TAG, p.toString());
         final int[] beats = Utilities.integerListToArray(p.getBeats());
         final int[] downBeats = Utilities.integerListToArray(p.getDownBeats());
+        final int countOffSubs = p.getCountOffSubdivision();
 
 //        Utilities.printArray(beats);
 //        Utilities.printArray(downBeats);
@@ -123,9 +124,11 @@ public class Metronome {
                     if(beatsPerMeasureCount == 0) { // It's a downbeat!
                         mSoundPool.play(mHiClickId, 1.0f, 1.0f, 1, 0, 1.0f);
                         // start counting until next downbeat
-                        beatsPerMeasureCount = downBeats[measurePointer++];
+                        beatsPerMeasureCount = downBeats[measurePointer];
+                        mListener.metronomeMeasureNumber(measurePointer++ + "");
                     } else { // inner beat
                         mSoundPool.play(mLoClickId, 1.0f, 1.0f, 1, 0, 1.0f);
+
                     }
                     // if we've reached the end of the piece, stop the metronome.
                     if(beatPointer == beats.length - 1) {
@@ -136,7 +139,15 @@ public class Metronome {
                     beatsPerMeasureCount--; // count down one beat in the measure
                 }
                 count++; // count one subdivision gone by...
-
+                if(measurePointer == 1) {
+                    if(beatPointer >= 3 + countOffSubs) {
+                        mListener.metronomeMeasureNumber("GO");
+                    } else if (beatPointer >= 3) {
+                        mListener.metronomeMeasureNumber("READY");
+                    } else {
+                        mListener.metronomeMeasureNumber((beatPointer) + "");
+                    }
+                }
             }
 
             @Override

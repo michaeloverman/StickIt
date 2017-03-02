@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StickIt</string>
+    <string name="app_name">Ms. Count</string>
     <string name="pattern_length">Pattern Length</string>
     <string name="choose_pattern_length">Choose Number of Stickings</string>
     <string-array name="pattern_lengths">

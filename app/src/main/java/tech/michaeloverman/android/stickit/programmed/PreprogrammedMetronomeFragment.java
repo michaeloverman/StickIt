@@ -53,7 +53,7 @@ public class PreprogrammedMetronomeFragment extends Fragment
     @BindView(R.id.start_stop_button) Button mStartStopButton;
     @BindView(R.id.tempo_up_button) ImageButton mTempoUpButton;
     @BindView(R.id.tempo_down_button) ImageButton mTempoDownButton;
-    TextView mCurrentProgramLabel;
+    @BindView(R.id.current_measure_number) TextView mCurrentMeasureNumber;
 
     private Handler mRunnableHandler;
     private Runnable mDownRunnable;
@@ -115,7 +115,6 @@ public class PreprogrammedMetronomeFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.programmed_fragment, container, false);
         ButterKnife.bind(this, view);
-        mCurrentProgramLabel = (TextView) view.findViewById(R.id.current_program_label);
 
 //        composerSelected(mCurrentComposer);
 
@@ -198,11 +197,10 @@ public class PreprogrammedMetronomeFragment extends Fragment
     public void metronomeStartStop() {
         if(mMetronomeRunning) {
             Log.d(TAG, "metronomeStop() " + mCurrentComposer);
-//            mCurrentProgramLabel.setText("Playing with the labels...");
             mMetronome.stop();
             mMetronomeRunning = false;
             mStartStopButton.setText("Start");
-//            updateGUI();
+            mCurrentMeasureNumber.setText("--");
         } else {
             Log.d(TAG, "metronomeStart() " + mCurrentPiece.getTitle());
             if(mCurrentPiece == null) {
@@ -213,6 +211,11 @@ public class PreprogrammedMetronomeFragment extends Fragment
             mStartStopButton.setText("Stop");
             mMetronome.play(mCurrentPiece, mCurrentTempo);
         }
+    }
+
+    @Override
+    public void metronomeMeasureNumber(String mm) {
+        mCurrentMeasureNumber.setText(mm);
     }
 
     @Override

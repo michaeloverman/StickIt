@@ -45,4 +45,10 @@ public class NormalMetronomeFragment extends Fragment implements MetronomeListen
     public void metronomeStartStop() {
 
     }
+
+
+    @Override
+    public void metronomeMeasureNumber(String mm) {
+        // method not used
+    }
 }

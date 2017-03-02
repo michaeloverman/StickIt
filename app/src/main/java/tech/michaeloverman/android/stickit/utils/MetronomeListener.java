@@ -6,4 +6,5 @@ package tech.michaeloverman.android.stickit.utils;
 
 public interface MetronomeListener {
     void metronomeStartStop();
+    void metronomeMeasureNumber(String mm);
 }
