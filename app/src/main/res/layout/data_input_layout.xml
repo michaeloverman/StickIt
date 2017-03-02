@@ -49,6 +49,7 @@
         android:inputType="textCapWords"
         android:digits="@string/valid_characters_string"
         android:hint="Sonata No. 3, Allegro"
+        android:nextFocusForward="@+id/baseline_subdivision_entry"
         app:layout_constraintTop_toBottomOf="@+id/title_label_view"
         android:layout_marginLeft="@dimen/data_entry_outside_margin"
         android:layout_marginStart="@dimen/data_entry_outside_margin"

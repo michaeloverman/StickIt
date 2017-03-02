@@ -1,6 +1,7 @@
 package tech.michaeloverman.android.stickit.programmed;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,6 +42,10 @@ public class PreprogrammedMetronomeFragment extends Fragment
         implements WorksListAdapter.WorksListAdapterOnClickHandler,
         SelectComposerFragment.ComposerCallback, MetronomeListener {
     private static final String TAG = PreprogrammedMetronomeFragment.class.getSimpleName();
+    private static final boolean UP = true;
+    private static final boolean DOWN = false;
+    private static final int MAXIMUM_TEMPO = 350;
+    private static final int MINIMUM_TEMPO = 1;
 
     private PieceOfMusic mCurrentPiece;
     private List<TitleKeyObject> mPiecesList;
@@ -66,6 +72,15 @@ public class PreprogrammedMetronomeFragment extends Fragment
     Button mSelectComposer;
 
     private WorksListAdapter mAdapter;
+    private Handler mRunnableHandler;
+    private Runnable mDownRunnable;
+    private Runnable mUpRunnable;
+    private static final int INITIAL_TEMPO_CHANGE_DELAY = 400;
+    private static final int FIRST_FASTER_SPEED_DELAY = 80;
+    private static final int RATE_OF_DELAY_CHANGE = 2;
+    private static int mTempoChangeDelay;
+    private static final int ONE_LESS = INITIAL_TEMPO_CHANGE_DELAY - 2;
+    private static final int MIN_TEMPO_CHANGE_DELAY = 20;
 
     public static Fragment newInstance() {
         return new PreprogrammedMetronomeFragment();
@@ -80,6 +95,26 @@ public class PreprogrammedMetronomeFragment extends Fragment
         mMetronome = new Metronome(getActivity(), this);
         mMetronomeRunning = false;
 
+        mRunnableHandler = new Handler();
+        mTempoChangeDelay = INITIAL_TEMPO_CHANGE_DELAY;
+        mDownRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if(mTempoChangeDelay == ONE_LESS) mTempoChangeDelay = FIRST_FASTER_SPEED_DELAY;
+                else if (mTempoChangeDelay < MIN_TEMPO_CHANGE_DELAY) mTempoChangeDelay = MIN_TEMPO_CHANGE_DELAY;
+                changeTempo(DOWN);
+                mRunnableHandler.postDelayed(this, mTempoChangeDelay--);
+            }
+        };
+        mUpRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if(mTempoChangeDelay == ONE_LESS) mTempoChangeDelay = FIRST_FASTER_SPEED_DELAY;
+                else if (mTempoChangeDelay < MIN_TEMPO_CHANGE_DELAY) mTempoChangeDelay = MIN_TEMPO_CHANGE_DELAY;
+                changeTempo(UP);
+                mRunnableHandler.postDelayed(this, mTempoChangeDelay -= RATE_OF_DELAY_CHANGE);
+            }
+        };
     }
 
     @Nullable
@@ -101,6 +136,41 @@ public class PreprogrammedMetronomeFragment extends Fragment
         mPiecesRecyclerView.setAdapter(mAdapter);
         mPiecesRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
+        mTempoDownButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mRunnableHandler.post(mDownRunnable);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mRunnableHandler.removeCallbacks(mDownRunnable);
+                        mTempoChangeDelay = INITIAL_TEMPO_CHANGE_DELAY;
+                        break;
+                    default:
+                        return false;
+                }
+                return true;
+            }
+        });
+        mTempoUpButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mRunnableHandler.post(mUpRunnable);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mRunnableHandler.removeCallbacks(mUpRunnable);
+                        mTempoChangeDelay = INITIAL_TEMPO_CHANGE_DELAY;
+                        break;
+                    default:
+                        return false;
+                }
+                return true;
+            }
+        });
+
 //        mCurrentComposer = "Cirone, Anthony";
         composerSelected(mCurrentComposer);
 
@@ -109,18 +179,25 @@ public class PreprogrammedMetronomeFragment extends Fragment
 
     @OnClick(R.id.tempo_up_button)
     public void increaseTempo() {
-        mCurrentTempo++;
+        changeTempo(UP);
+    }
+
+    private void changeTempo(boolean direction) {
+        if(direction) {
+            mCurrentTempo++;
+        } else {
+            mCurrentTempo--;
+        }
+        if(mCurrentTempo < MINIMUM_TEMPO) {
+            mCurrentTempo = MINIMUM_TEMPO;
+        } else if(mCurrentTempo > MAXIMUM_TEMPO) {
+            mCurrentTempo = MAXIMUM_TEMPO;
+        }
         updateTempoView();
     }
 
     private void updateTempoView() {
         mTVCurrentTempo.setText(Integer.toString(mCurrentTempo));
-    }
-
-    @OnClick(R.id.tempo_down_button)
-    public void decreaseTempo() {
-        mCurrentTempo--;
-        updateTempoView();
     }
 
     @OnClick(R.id.start_stop_button)

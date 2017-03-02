@@ -7,4 +7,6 @@
     <dimen name="list_item_min_height">40dp</dimen>
     <dimen name="list_item_padding">8dp</dimen>
     <dimen name="data_entry_outside_margin">16dp</dimen>
+    <dimen name="generic_8dp_margin">8dp</dimen>
+    <dimen name="tempo_button_size">50dp</dimen>
 </resources>
