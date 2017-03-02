@@ -32,7 +32,6 @@ import tech.michaeloverman.android.mscount.dialogs.PatternSpacingDialogFragment;
 import tech.michaeloverman.android.mscount.dialogs.ProgrammedMetronomeDialogFragment;
 import tech.michaeloverman.android.mscount.dialogs.StonePatternsDialogFragment;
 import tech.michaeloverman.android.mscount.dialogs.TempoMarkingDialogFragment;
-import tech.michaeloverman.android.mscount.pojos.PieceOfMusic;
 
 /**
  * Created by Michael on 5/18/2016.

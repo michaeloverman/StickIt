@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.michaeloverman.android.mscount.pojos.Click;
-import tech.michaeloverman.android.mscount.pojos.PieceOfMusic;
 import tech.michaeloverman.android.mscount.utils.MetronomeListener;
 import tech.michaeloverman.android.mscount.utils.Utilities;
 
