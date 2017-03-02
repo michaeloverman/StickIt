@@ -16,6 +16,7 @@ public class PieceOfMusic {
     private List<Integer> mBeats;
     private List<Integer> mDownBeats;
     private int mSubdivision;
+    private int[] mCountOff;
     private int mCountOffSubdivision;
     private int mCountOffMeasureLength;
 
@@ -110,29 +111,26 @@ public class PieceOfMusic {
 
 
     /** Uses the 'length' of first beat to generate count off measure */
-    private int[] buildCountoff(int subdivision) {
-        mCountOffMeasureLength = COUNTOFF_LENGTH + subdivision - 1;
-        int[] countOff = new int[mCountOffMeasureLength];
+    public void buildCountoff() {
+        mCountOffMeasureLength = COUNTOFF_LENGTH + mCountOffSubdivision - 1;
+        mCountOff = new int[mCountOffMeasureLength];
         int i;
-        for (i = 0; i < countOff.length; ) {
+        for (i = 0; i < mCountOff.length; ) {
             if (i != COUNTOFF_LENGTH - 2) {
-                countOff[i++] = subdivision;
+                mCountOff[i++] = mSubdivision;
             } else {
-                for (int j = 0; j < subdivision; j++) {
-                    countOff[i++] = 1;
+                for (int j = 0; j < mCountOffSubdivision; j++) {
+                    mCountOff[i++] = mSubdivision / mCountOffSubdivision;
                 }
             }
         }
-        return countOff;
+
+    }
+    public int[] countOffArray() {
+        return mCountOff;
     }
 
-    private int[] combine(int[] countoff, int[] beats) {
-        Log.d(TAG, "combine() arrays...");
-        int[] combination = new int[countoff.length + beats.length];
-        System.arraycopy(countoff, 0, combination, 0, countoff.length);
-        System.arraycopy(beats, 0, combination, countoff.length, beats.length);
-        return combination;
-    }
+
 
     public List<Integer> getDownBeats() {
         return mDownBeats;

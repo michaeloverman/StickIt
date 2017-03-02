@@ -28,7 +28,9 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import tech.michaeloverman.android.stickit.pojos.HardData;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
+import tech.michaeloverman.android.stickit.utils.Utilities;
 
 /**
  *
@@ -66,6 +68,8 @@ public class DataEntryFragment extends Fragment {
         mPieceOfMusic = new PieceOfMusic();
         mBeats = new ArrayList<>();
         mDownBeats = new ArrayList<>();
+
+//        loadNewPieces();
     }
 
     @Override
@@ -157,6 +161,8 @@ public class DataEntryFragment extends Fragment {
         mPieceOfMusic.setTitle(title);
         mPieceOfMusic.setSubdivision(Integer.parseInt(subd));
         mPieceOfMusic.setCountOffSubdivision(Integer.parseInt(countoffSubd));
+        mPieceOfMusic.buildCountoff();
+        Utilities.appendCountoff(mPieceOfMusic.countOffArray(), mBeats, mDownBeats);
         mPieceOfMusic.setBeats(mBeats);
         mPieceOfMusic.setDownBeats(mDownBeats);
 
@@ -165,6 +171,41 @@ public class DataEntryFragment extends Fragment {
         getFragmentManager().popBackStackImmediate();
     }
 
+    private void loadNewPieces() {
+        PieceOfMusic loader;
+        int NUMPIECES = HardData.composers.length;
+        for(int i = 0; i < NUMPIECES; i++) {
+            loader = new PieceOfMusic();
+            loader.setAuthor(HardData.composers[i]);
+            loader.setTitle(HardData.titles[i]);
+            loader.setSubdivision(HardData.subdivisions[i]);
+            loader.setCountOffSubdivision(HardData.countoffsubdivisions[i]);
+            loader.buildCountoff();
+            List<Integer> bs = Utilities.arrayToIntegerList(HardData.lotsObeats[i]);
+            List<Integer> dbs = Utilities.arrayToIntegerList(HardData.lotsOdownBeats[i]);
+            Utilities.appendCountoff(loader.countOffArray(), bs, dbs);
+            loader.setBeats(bs);
+            loader.setDownBeats(dbs);
+
+            saveToDatabase(loader);
+        }
+    }
+    private void saveToDatabase(PieceOfMusic p) {
+        Log.d(TAG, "Saving to local database, or to Firebase: " + p.getTitle() + " by " + p.getAuthor());
+        Log.d(TAG, "Pieces is " + p.getDownBeats().size() + " measures long.");
+
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mPiecesDatabaseReference = mDatabase.getReference();
+
+        String key = mPiecesDatabaseReference.child("pieces").push().getKey();
+//        Map<String, Object> values = p.toMap();
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("/pieces/" + key, p);
+        updates.put("/composers/" + p.getAuthor() + "/" + p.getTitle(), key);
+        mPiecesDatabaseReference.updateChildren(updates);
+
+    }
     private void saveToDatabase() {
         Log.d(TAG, "Saving to local database, or to Firebase: " + mPieceOfMusic.getTitle() + " by " + mPieceOfMusic.getAuthor());
         Log.d(TAG, "Pieces is " + mPieceOfMusic.getDownBeats().size() + " measures long.");

@@ -2,6 +2,7 @@ package tech.michaeloverman.android.stickit.utils;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,11 +13,20 @@ public class Utilities {
     public static final String TAG = Utilities.class.getSimpleName();
 
     public static int[] integerListToArray(List<Integer> integerList) {
+//        if(integerList == null) return null;
         int[] ints = new int[integerList.size()];
         for(int i = 0; i < integerList.size(); i++) {
             ints[i] = integerList.get(i);
         }
         return ints;
+    }
+
+    public static List<Integer> arrayToIntegerList(int[] ints) {
+        List<Integer> list = new ArrayList<>();
+        for(int i = 0 ; i < ints.length; i++) {
+            list.add(ints[i]);
+        }
+        return list;
     }
 
     public static void printArray(int[] array) {
@@ -25,5 +35,21 @@ public class Utilities {
             sb.append(array[i] + ", ");
         }
         Log.d(TAG, sb.toString());
+    }
+
+    public static int[] combine(int[] countoff, int[] beats) {
+        Log.d(TAG, "combine() arrays...");
+        int[] combination = new int[countoff.length + beats.length];
+        System.arraycopy(countoff, 0, combination, 0, countoff.length);
+        System.arraycopy(beats, 0, combination, countoff.length, beats.length);
+        return combination;
+    }
+
+    public static void appendCountoff(int[] countoff, List<Integer> beats, List<Integer> downBeats) {
+        for(int i = countoff.length - 1; i >= 0; i--) {
+            beats.add(0, countoff[i]);
+        }
+        downBeats.add(0, countoff.length);
+//        return compound;
     }
 }

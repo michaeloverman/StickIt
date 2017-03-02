@@ -21,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -168,12 +167,11 @@ public class PreprogrammedMetronomeFragment extends Fragment
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Iterable<DataSnapshot> pieceList = dataSnapshot.getChildren();
-                        // TODO: set list on the adapter
                         ArrayList<TitleKeyObject> list = new ArrayList<>();
                         for (DataSnapshot snap : pieceList) {
                             list.add(new TitleKeyObject(snap.getKey(), snap.getValue().toString()));
                         }
-                        Collections.sort(list);
+//                        Collections.sort(list);
                         mAdapter.setTitles(list);
                         mWorkTitlesLabel.setText(getString(R.string.work_titles_label, mCurrentComposer));
                         onClick(list.get(0).getKey());
@@ -194,7 +192,7 @@ public class PreprogrammedMetronomeFragment extends Fragment
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         mCurrentPiece = dataSnapshot.getValue(PieceOfMusic.class);
-                        updateProgram();
+                        updateGUI();
                     }
 
                     @Override
@@ -202,9 +200,15 @@ public class PreprogrammedMetronomeFragment extends Fragment
 
                     }
                 });
+//        Log.d(TAG, mCurrentPiece.toString());
+//        Log.d(TAG, mCurrentPiece.getAuthor());
+//        Log.d(TAG, mCurrentPiece.getTitle());
+//        Log.d(TAG, mCurrentPiece.getBeats().toString());
+//        Log.d(TAG, mCurrentPiece.getDownBeats().toString());
+//        Log.d(TAG, mCurrentPiece.getSubdivision() + "");
     }
 
-    private void updateProgram() {
+    private void updateGUI() {
         // TODO set TitleViews etc
         mTVCurrentPiece.setText(mCurrentPiece.getTitle());
 

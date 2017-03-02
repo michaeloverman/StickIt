@@ -95,6 +95,7 @@ public class Metronome {
     public void play(PieceOfMusic p, int tempo) {
         Log.d(TAG, "metronome play()");
         mDelay = 60000 / tempo / p.getSubdivision();
+        Log.d(TAG, p.toString());
         final int[] beats = Utilities.integerListToArray(p.getBeats());
         final int[] downBeats = Utilities.integerListToArray(p.getDownBeats());
 

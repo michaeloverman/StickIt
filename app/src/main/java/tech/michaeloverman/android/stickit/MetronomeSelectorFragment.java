@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import tech.michaeloverman.android.stickit.programmed.PreprogrammedMetronomeFragment;
-import tech.michaeloverman.android.stickit.stickingpatterns.StickingPatternsFragment;
 
 /**
  * Created by Michael on 2/24/2017.
@@ -26,12 +25,9 @@ public class MetronomeSelectorFragment extends Fragment {
     private static final String TAG = MetronomeSelectorFragment.class.getSimpleName();
 
 
-    @BindView(R.id.normal_metronome_button)
-    Button mNormalMetButton;
-    @BindView(R.id.sticking_patters_metronome_button)
-    Button mStickingPatternsButton;
-    @BindView(R.id.preprogrammed_metronome_button)
-    Button mPreprogrammedMetButton;
+    @BindView(R.id.normal_metronome_button) Button mNormalMetButton;
+//    @BindView(R.id.sticking_patters_metronome_button) Button mStickingPatternsButton;
+    @BindView(R.id.preprogrammed_metronome_button) Button mPreprogrammedMetButton;
     private Unbinder mUnbinder;
 
     public static Fragment newInstance() {
@@ -43,6 +39,7 @@ public class MetronomeSelectorFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -59,8 +56,9 @@ public class MetronomeSelectorFragment extends Fragment {
         mUnbinder.unbind();
     }
 
+    // R.id.sticking_patters_metronome_button,
     @OnClick( { R.id.normal_metronome_button, R.id.create_new_program_button,
-            R.id.sticking_patters_metronome_button, R.id.preprogrammed_metronome_button })
+             R.id.preprogrammed_metronome_button })
     public void buttonClicked(View button) {
         Log.d(TAG, "buttonClicked()");
         Fragment fragment;
@@ -68,9 +66,9 @@ public class MetronomeSelectorFragment extends Fragment {
             case R.id.normal_metronome_button:
                 fragment = NormalMetronomeFragment.newInstance();
                 break;
-            case R.id.sticking_patters_metronome_button:
-                fragment = StickingPatternsFragment.newInstance();
-                break;
+//            case R.id.sticking_patters_metronome_button:
+//                fragment = StickingPatternsFragment.newInstance();
+//                break;
             case R.id.preprogrammed_metronome_button:
                 fragment = PreprogrammedMetronomeFragment.newInstance();
                 break;

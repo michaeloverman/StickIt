@@ -36,7 +36,6 @@ import tech.michaeloverman.android.stickit.R;
 
 public class SelectComposerFragment extends Fragment {
     private static final String TAG = SelectComposerFragment.class.getSimpleName();
-    public static final String SELECTED_COMPOSER_EXTRA = "selected_composer_name";
 
     @BindView(R.id.composer_recycler_view)
     RecyclerView mRecyclerView;
@@ -120,6 +119,8 @@ public class SelectComposerFragment extends Fragment {
 
                     }
                 });
+
+
     }
 
     /**
