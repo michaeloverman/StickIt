@@ -52,4 +52,14 @@ public class Utilities {
         downBeats.add(0, countoff.length);
 //        return compound;
     }
+
+    public static List<Integer> createBeatList(int[] downbeats, int subd) {
+        List<Integer> beats = new ArrayList<>();
+        for (int i = 0; i < downbeats.length; i++) {
+            for(int j = 0; j < downbeats[i]; j++) {
+                beats.add(subd);
+            }
+        }
+        return beats;
+    }
 }

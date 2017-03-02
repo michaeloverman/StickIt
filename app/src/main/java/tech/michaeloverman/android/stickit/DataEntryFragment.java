@@ -181,7 +181,12 @@ public class DataEntryFragment extends Fragment {
             loader.setSubdivision(HardData.subdivisions[i]);
             loader.setCountOffSubdivision(HardData.countoffsubdivisions[i]);
             loader.buildCountoff();
-            List<Integer> bs = Utilities.arrayToIntegerList(HardData.lotsObeats[i]);
+            List<Integer> bs;
+            if(HardData.lotsObeats[i].length == 0) {
+                bs = Utilities.createBeatList(HardData.lotsOdownBeats[i], HardData.subdivisions[i]);
+            } else {
+                bs = Utilities.arrayToIntegerList(HardData.lotsObeats[i]);
+            }
             List<Integer> dbs = Utilities.arrayToIntegerList(HardData.lotsOdownBeats[i]);
             Utilities.appendCountoff(loader.countOffArray(), bs, dbs);
             loader.setBeats(bs);

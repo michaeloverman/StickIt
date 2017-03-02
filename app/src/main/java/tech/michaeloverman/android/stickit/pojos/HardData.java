@@ -276,6 +276,97 @@ public class HardData {
             1,1,1,2,2,3
     };
 
+    public static int[] petersInt30beats = {
+
+    };
+    public static int[] petersInt30Downbeats = {
+            4,4,3,3,4,
+            4,3,4,3,4,
+            3,3,4,4,
+            4,3,4,4,
+            3,3,4,4,2,
+            3,4,4,4,3,
+            3,4,4,3,3,
+            4,4,2,3,4,4,
+            3,3,4,4,
+            4,3,4,4,
+            3,3
+    };
+
+    public static int[] petersInt31beats = {
+
+    };
+    public static int[] petersInt31Downbeats = {
+            3,4,3,3,3,3,4,4,3,
+            4,4,4,4,3,3,4,3,
+            3,2,3,4,3,3,2,2,3,3,
+            4,3,4,4,3,4,3,
+            2,4,3,4,3,4,2,2,2,3,3
+    };
+
+    public static int[] petersInt32Beats = {
+            2,2,2,2,2,2,2,2,3,3,2,2,2,2,
+            3,3,2,2,2,2,2,3,2,2,2,2,2,2,
+            3,3,2,2,2,2,2,3,2,2,3,3,3,
+            2,2,3,2,3,2,2,2,2,2,2,2,2,
+            3,3,3,3,3,3,2,2,2,2,2,2,
+            2,2,2,3,2,2,2,2,2,2,2,2,2,2,2,2,
+            3,3,2,2,2,2,3,3,3,2,2,
+            3,2,2,3,3,3,2,2,3,2,
+            2,2,2,2,2,2,3,2,2,3,2,2,
+            3,2,2,2,2,2,2,2,2,3,2,3,3,3,
+            3,3,2,2,2,3,3,2,2,2,2,3,3
+    };
+    public static int[] petersInt32Downbeats = {
+            4,4,2,4,2,3,3,4,2,
+            2,4,2,3,2,3,2,4,4,
+            3,3,3,3,3,1,3,2,3,4,
+            1,1,2,2,3,2,1,2,2,3,2,
+            2,2,2,1,2,1,2,1,3,3,2,1,2,2,2,3,2,4,2
+    };
+
+    public static int[] petersAdv3beats = {
+            3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+            3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+            3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+            2,2,2,2,2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,2,2,2,2,
+            3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+            3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+            3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+    };
+    public static int[] petersAdv3Downbeats = {
+            2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,2,2
+    };
+
+    public static int[] petersAdv7beats = {
+            3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,
+            3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,
+            3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,
+            3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,
+            3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,
+            3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,
+            3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,
+            3,3,2,2,2,3,3,2,2,2,3,3,2,2,2,3,3,2,2,2
+    };
+    public static int[] petersAdv7Downbeats = {
+            2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,
+            2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,
+            2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,
+            2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3
+    };
 
     public static String[] composers = {
 //            "Cirone, Anthony",
@@ -284,7 +375,13 @@ public class HardData {
 //            "Cirone, Anthony",
 //            "Cirone, Anthony",
 //            "Cirone, Anthony",
-//            "Cirone, Anthony"
+//            "Cirone, Anthony",
+            "Peters, Mitchell",
+            "Peters, Mitchell",
+//            "Peters, Mitchell",
+//            "Peters, Mitchell",
+//            "Peters, Mitchell",
+
     };
     public static String[] titles = {
 //            "Portraits in Rhythm 39",
@@ -294,6 +391,12 @@ public class HardData {
 //            "Portraits in Rhythm 45",
 //            "Portraits in Rhythm 47",
 //            "Portraits in Rhythm 49",
+            "Intermediate SD Studies 30",
+            "Intermediate SD Studies 31",
+//            "Intermediate SD Studies 32",
+//            "Advanced SD Studies 3",
+//            "Advanced SD Studies 7",
+
     };
     public static int[][] lotsObeats = {
 //            cirone39Beats,
@@ -302,7 +405,13 @@ public class HardData {
 //            cirone40Beats,
 //            cirone45Beats,
 //            cirone47Beats,
-//            cirone49Beats
+//            cirone49Beats,
+            petersInt30beats,
+            petersInt31beats,
+//            petersInt32Beats,
+//            petersAdv3beats,
+//            petersAdv7beats,
+
     };
     public static int[][] lotsOdownBeats = {
 //            cirone39DownBeats,
@@ -311,14 +420,32 @@ public class HardData {
 //            cirone40DownBeats,
 //            cirone45DownBeats,
 //            cirone47DownBeats,
-//            cirone49DownBeats
+//            cirone49DownBeats,
+//            petersInt30Downbeats,
+//            petersInt31Downbeats,
+//            petersInt32Downbeats,
+//            petersAdv3Downbeats,
+//            petersAdv7Downbeats,
+
     };
     public static int[] subdivisions = {
 //            4,6,3,6,3,6,2
 //            3
+//            2,
+//            2,
+//            2,
+//            3,
+//            2,
+
     };
     public static int[] countoffsubdivisions = {
 //            2,3,2,3,3,3,2
 //            3
+//            2,
+//            2,
+//            2,
+//            3,
+//            2,
+
     };
 }
