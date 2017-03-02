@@ -1,12 +1,12 @@
 package tech.michaeloverman.android.stickit.programmed;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,21 +17,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tech.michaeloverman.android.stickit.Metronome;
 import tech.michaeloverman.android.stickit.R;
 import tech.michaeloverman.android.stickit.pojos.PieceOfMusic;
-import tech.michaeloverman.android.stickit.pojos.TitleKeyObject;
 import tech.michaeloverman.android.stickit.utils.MetronomeListener;
 
 /**
@@ -39,39 +30,31 @@ import tech.michaeloverman.android.stickit.utils.MetronomeListener;
  */
 
 public class PreprogrammedMetronomeFragment extends Fragment
-        implements WorksListAdapter.WorksListAdapterOnClickHandler,
-        SelectComposerFragment.ComposerCallback, MetronomeListener {
+        implements ProgramSelectFragment.ProgramCallback, MetronomeListener {
+
     private static final String TAG = PreprogrammedMetronomeFragment.class.getSimpleName();
     private static final boolean UP = true;
     private static final boolean DOWN = false;
     private static final int MAXIMUM_TEMPO = 350;
     private static final int MINIMUM_TEMPO = 1;
+    private static final String CURRENT_PIECE_KEY = "current_piece_key";
+    private static final String CURRENT_TEMPO_KEY = "current_tempo_key";
+    private static final String CURRENT_COMPOSER_KEY = "current_composer_key";
 
     private PieceOfMusic mCurrentPiece;
-    private List<TitleKeyObject> mPiecesList;
-    private int mCurrentTempo = 120;
-    private String mCurrentComposer = "Cirone, Anthony";
+    private int mCurrentTempo;
+    private String mCurrentComposer;
     private Metronome mMetronome;
     private boolean mMetronomeRunning;
 
-    @BindView(R.id.current_program_title)
-    TextView mTVCurrentPiece;
-    @BindView(R.id.current_tempo_setting)
-    TextView mTVCurrentTempo;
-    @BindView(R.id.start_stop_button)
-    Button mStartStopButton;
-    @BindView(R.id.tempo_up_button)
-    ImageButton mTempoUpButton;
-    @BindView(R.id.tempo_down_button)
-    ImageButton mTempoDownButton;
-    @BindView(R.id.other_pieces_label)
-    TextView mWorkTitlesLabel;
-    @BindView(R.id.piece_list_recycler_view)
-    RecyclerView mPiecesRecyclerView;
-    @BindView(R.id.select_composer_button)
-    Button mSelectComposer;
+    @BindView(R.id.current_composer_name) TextView mTVCurrentComposer;
+    @BindView(R.id.current_program_title) TextView mTVCurrentPiece;
+    @BindView(R.id.current_tempo_setting) TextView mTVCurrentTempo;
+    @BindView(R.id.start_stop_button) Button mStartStopButton;
+    @BindView(R.id.tempo_up_button) ImageButton mTempoUpButton;
+    @BindView(R.id.tempo_down_button) ImageButton mTempoDownButton;
+    TextView mCurrentProgramLabel;
 
-    private WorksListAdapter mAdapter;
     private Handler mRunnableHandler;
     private Runnable mDownRunnable;
     private Runnable mUpRunnable;
@@ -91,6 +74,16 @@ public class PreprogrammedMetronomeFragment extends Fragment
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+
+        if(savedInstanceState != null) {
+            mCurrentTempo = savedInstanceState.getInt(CURRENT_TEMPO_KEY);
+//            mCurrentPiece = savedInstanceState.getString(CURRENT_PIECE_KEY);
+            mCurrentComposer = savedInstanceState.getString(CURRENT_COMPOSER_KEY);
+        } else {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            mCurrentTempo = prefs.getInt(CURRENT_TEMPO_KEY, 120);
+            mCurrentComposer = prefs.getString(CURRENT_COMPOSER_KEY, "Overman, Michael");
+        }
 
         mMetronome = new Metronome(getActivity(), this);
         mMetronomeRunning = false;
@@ -122,19 +115,13 @@ public class PreprogrammedMetronomeFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.programmed_fragment, container, false);
         ButterKnife.bind(this, view);
+        mCurrentProgramLabel = (TextView) view.findViewById(R.id.current_program_label);
 
-        // update label
-        // set current piece - last one used...
+//        composerSelected(mCurrentComposer);
 
-
-        // set current tempo
-        // update marking
-
-        // get list of piece options
-
-        mAdapter = new WorksListAdapter(this.getActivity(), mPiecesList, this);
-        mPiecesRecyclerView.setAdapter(mAdapter);
-        mPiecesRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+//        mAdapter = new WorksListAdapter(this.getActivity(), mPiecesList, this);
+//        mPiecesRecyclerView.setAdapter(mAdapter);
+//        mPiecesRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         mTempoDownButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -172,14 +159,11 @@ public class PreprogrammedMetronomeFragment extends Fragment
         });
 
 //        mCurrentComposer = "Cirone, Anthony";
-        composerSelected(mCurrentComposer);
-
+        if(mCurrentPiece != null) {
+            updateGUI();
+        }
+//        updateTempoView();
         return view;
-    }
-
-    @OnClick(R.id.tempo_up_button)
-    public void increaseTempo() {
-        changeTempo(UP);
     }
 
     private void changeTempo(boolean direction) {
@@ -200,13 +184,27 @@ public class PreprogrammedMetronomeFragment extends Fragment
         mTVCurrentTempo.setText(Integer.toString(mCurrentTempo));
     }
 
+    @OnClick( { R.id.current_program_label, R.id.current_program_title } )
+    public void selectNewProgram() {
+        mCurrentPiece = null;
+        Fragment fragment = ProgramSelectFragment.newInstance(this, mCurrentComposer);
+        FragmentTransaction trans = getFragmentManager().beginTransaction();
+        trans.replace(R.id.fragment_container, fragment);
+        trans.addToBackStack(null);
+        trans.commit();
+    }
+
     @OnClick(R.id.start_stop_button)
     public void metronomeStartStop() {
         if(mMetronomeRunning) {
+            Log.d(TAG, "metronomeStop() " + mCurrentComposer);
+//            mCurrentProgramLabel.setText("Playing with the labels...");
             mMetronome.stop();
             mMetronomeRunning = false;
             mStartStopButton.setText("Start");
+//            updateGUI();
         } else {
+            Log.d(TAG, "metronomeStart() " + mCurrentPiece.getTitle());
             if(mCurrentPiece == null) {
                 Toast.makeText(this.getContext(), "Select a piece to program metronome", Toast.LENGTH_SHORT).show();
                 return;
@@ -217,84 +215,34 @@ public class PreprogrammedMetronomeFragment extends Fragment
         }
     }
 
-    @OnClick(R.id.select_composer_button)
-    public void selectComposer() {
-        mCurrentPiece = null;
-        Fragment fragment = SelectComposerFragment.newInstance(this);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState() " + mCurrentPiece.getTitle() + " by " + mCurrentComposer);
+        Log.d(TAG, "..... Current Tempo: " + mCurrentTempo);
+        outState.putString(CURRENT_PIECE_KEY, mCurrentPiece.getTitle());
+        outState.putInt(CURRENT_TEMPO_KEY, mCurrentTempo);
+        outState.putString(CURRENT_COMPOSER_KEY, mCurrentComposer);
+
         super.onSaveInstanceState(outState);
 
-        // TODO save current piece
 
-        // TODO save current tempo setting
-
-    }
-
-    private void composerSelected(String composer) {
-        mCurrentComposer = composer;
-        FirebaseDatabase.getInstance().getReference().child("composers").child(mCurrentComposer)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterable<DataSnapshot> pieceList = dataSnapshot.getChildren();
-                        ArrayList<TitleKeyObject> list = new ArrayList<>();
-                        for (DataSnapshot snap : pieceList) {
-                            list.add(new TitleKeyObject(snap.getKey(), snap.getValue().toString()));
-                        }
-//                        Collections.sort(list);
-                        mAdapter.setTitles(list);
-                        mWorkTitlesLabel.setText(getString(R.string.work_titles_label, mCurrentComposer));
-                        onClick(list.get(0).getKey());
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-    }
-
-    @Override
-    public void onClick(String pieceId) {
-        FirebaseDatabase.getInstance().getReference().child("pieces").child(pieceId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mCurrentPiece = dataSnapshot.getValue(PieceOfMusic.class);
-                        updateGUI();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-//        Log.d(TAG, mCurrentPiece.toString());
-//        Log.d(TAG, mCurrentPiece.getAuthor());
-//        Log.d(TAG, mCurrentPiece.getTitle());
-//        Log.d(TAG, mCurrentPiece.getBeats().toString());
-//        Log.d(TAG, mCurrentPiece.getDownBeats().toString());
-//        Log.d(TAG, mCurrentPiece.getSubdivision() + "");
     }
 
     private void updateGUI() {
         // TODO set TitleViews etc
+        Log.d(TAG, "updateGUI() " + mCurrentPiece.getAuthor() + ": " + mCurrentPiece.getTitle());
         mTVCurrentPiece.setText(mCurrentPiece.getTitle());
-
+        mTVCurrentComposer.setText(mCurrentComposer);
+//        mCurrentProgramLabel.setText("Now isn't this fun.");
+        updateTempoView();
     }
 
-
     @Override
-    public void newComposer(String name) {
-        Log.d(TAG, "newComposer() callback");
-        mCurrentComposer = name;
+    public void newPiece(PieceOfMusic piece) {
+        Log.d(TAG, "newPiece() " + piece.getTitle());
+        mCurrentPiece = piece;
+        mCurrentComposer = mCurrentPiece.getAuthor();
+//        mCurrentProgramLabel.setText("A barrel of laughs");
+//        updateGUI();
     }
 }
